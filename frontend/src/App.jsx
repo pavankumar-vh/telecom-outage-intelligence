@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { AlertCircle, RefreshCw } from 'react-icons/fa';
 import './App.css';
+import ErrorBoundary from './components/ErrorBoundary';
 import { KPIContainer } from './components/KPICards';
-import { IncidentTable } from './components/IncidentTable';
+import { IncidentTable } from './components/IncidentTableEnhanced';
 import { FilterBar } from './components/FilterBar';
 import {
   SeverityChart,
@@ -28,6 +29,7 @@ function Dashboard() {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [selectedSeverity, setSelectedSeverity] = useState(null);
   const [scoreRange, setScoreRange] = useState([0, 100]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Calculate metrics from incidents
   const calculateMetrics = (incidents) => {
@@ -197,6 +199,8 @@ function Dashboard() {
             anomalies={anomalies}
             isLoading={loading}
             onIncidentClick={(incidentId) => navigate(`/incident/${incidentId}`)}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
         </div>
 
@@ -216,13 +220,15 @@ function Dashboard() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route path="/incident/:incidentId" element={<IncidentDetail />} />
-        <Route path="/regional/:region" element={<RegionalImpactView />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/incident/:incidentId" element={<IncidentDetail />} />
+          <Route path="/regional/:region" element={<RegionalImpactView />} />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
