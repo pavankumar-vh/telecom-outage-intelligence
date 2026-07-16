@@ -177,12 +177,25 @@ The project is built in **8 incremental phases**, each leaving the application i
 - ✅ Test with real data pipeline (5 incidents with anomalies detected)
 - ✅ Anomaly severity levels: HIGH, MEDIUM, LOW
 
-### Phase 5: Dashboard MVP
-- Build KPI cards (active outages, avg score, regions)
-- Create incident table with impact scores
-- Add region, severity, and time filters
-- Display trend charts and complaint graphs
-- Connect to backend APIs
+### Phase 5: Dashboard MVP ✅
+- ✅ Build KPI cards (active outages, avg impact score, affected customers, regions impacted)
+- ✅ Create incident table with impact scores, severity, and anomaly flags
+- ✅ Add region filter with all available regions
+- ✅ Add severity filter (Critical, Major, Warning, Minor)
+- ✅ Add impact score range slider filter
+- ✅ Display severity distribution pie chart
+- ✅ Display regional impact bar chart
+- ✅ Display impact score distribution chart
+- ✅ Display complaints vs impact score chart
+- ✅ Create expandable incident rows with detailed scoring breakdown
+- ✅ Integrate anomaly flags into incident table
+- ✅ Add actionable recommendations display
+- ✅ Connect all backend APIs (ranked incidents, anomalies)
+- ✅ Add auto-refresh every 30 seconds
+- ✅ Add manual refresh button with loading state
+- ✅ Add error handling and alerts
+- ✅ Dark theme with Tailwind CSS styling
+- ✅ Responsive design (mobile, tablet, desktop)
 
 ### Phase 6: Incident Detail Views
 - Build incident detail drill-down screen
@@ -454,10 +467,10 @@ git push -u origin feature/phase-X-description
 
 ## 📌 Status
 
-- **Current Phase**: 4 - Anomaly Detection ✅
-- **Next Phase**: 5 - Dashboard MVP
+- **Current Phase**: 5 - Dashboard MVP ✅
+- **Next Phase**: 6 - Incident Detail Views
 
 ---
 
 **Last Updated**: July 16, 2026  
-**Version**: 0.4.0 - MVP Phase 4 Complete
+**Version**: 0.5.0 - MVP Phase 5 Complete
