@@ -165,11 +165,17 @@ The project is built in **8 incremental phases**, each leaving the application i
 - ✅ Test with real data pipeline (10 incidents scored successfully)
 - ✅ Scoring formula validated across critical, major, warning, and minor severities
 
-### Phase 4: Anomaly Detection
-- Detect complaint spikes
-- Identify regional anomalies
-- Flag unusual patterns
-- Integrate anomalies into incident ranking
+### Phase 4: Anomaly Detection ✅
+- ✅ Implement complaint spike detection (1.5x baseline threshold)
+- ✅ Implement regional concentration detection (3+ incidents in region)
+- ✅ Implement customer base anomaly detection (1.8x baseline customers)
+- ✅ Implement high impact region detection (1.6x regional traffic baseline)
+- ✅ Create `/api/anomalies` endpoint with all anomaly types
+- ✅ Add `/api/anomalies/{severity}` endpoint for severity filtering
+- ✅ Add `/api/anomalies/region/{region}` endpoint for regional filtering
+- ✅ Comprehensive unit tests (7/7 passing)
+- ✅ Test with real data pipeline (5 incidents with anomalies detected)
+- ✅ Anomaly severity levels: HIGH, MEDIUM, LOW
 
 ### Phase 5: Dashboard MVP
 - Build KPI cards (active outages, avg score, regions)
@@ -306,7 +312,61 @@ Returns incidents ranked by impact score for a specific region.
 ```
 GET /api/anomalies
 ```
-Returns detected anomalies and flags (coming in Phase 4).
+Returns all detected anomalies in incident data with severity levels.
+
+**Anomaly Types:**
+- `complaint_spike` - Complaints exceed 1.5x baseline (severity: HIGH/MEDIUM/LOW)
+- `customer_base_anomaly` - Affected customers exceed 1.8x baseline
+- `regional_concentration` - 3+ incidents in same region
+- `high_impact_region` - Traffic exceeds 1.6x regional baseline
+
+**Response Format:**
+```json
+{
+  "status": "success",
+  "total_incidents_analyzed": 10,
+  "incidents_with_anomalies": 5,
+  "total_anomalies": 7,
+  "high_severity_anomalies": 1,
+  "incidents": [
+    {
+      "outage_id": "INC-4029",
+      "region": "US-SOUTH-01",
+      "incident_severity": "Critical",
+      "complaint_count": 3,
+      "affected_customers": 2950,
+      "avg_traffic_gbps": 550.5,
+      "has_anomalies": true,
+      "total_flags": 1,
+      "high_severity_count": 1,
+      "primary_concern": "Unusual customer base affected: 2,950 customers (baseline: 933)",
+      "anomaly_flags": [
+        {
+          "outage_id": "INC-4029",
+          "region": "US-SOUTH-01",
+          "anomaly_type": "customer_base_anomaly",
+          "severity": "high",
+          "description": "Unusual customer base affected: 2,950 customers (baseline: 933)",
+          "threshold_value": 1677.4,
+          "actual_value": 2950.0,
+          "deviation_percent": 215.8,
+          "recommendation": "This incident impacts more customers than typical - escalate to management"
+        }
+      ]
+    }
+  ]
+}
+```
+
+```
+GET /api/anomalies/{severity}
+```
+Returns anomalies filtered by severity level (high, medium, low).
+
+```
+GET /api/anomalies/region/{region}
+```
+Returns anomalies detected in a specific region.
 
 ## ⚙️ Environment Variables
 
@@ -394,10 +454,10 @@ git push -u origin feature/phase-X-description
 
 ## 📌 Status
 
-- **Current Phase**: 3 - Impact Scoring Engine ✅
-- **Next Phase**: 4 - Anomaly Detection
+- **Current Phase**: 4 - Anomaly Detection ✅
+- **Next Phase**: 5 - Dashboard MVP
 
 ---
 
 **Last Updated**: July 16, 2026  
-**Version**: 0.3.0 - MVP Phase 3 Complete
+**Version**: 0.4.0 - MVP Phase 4 Complete
