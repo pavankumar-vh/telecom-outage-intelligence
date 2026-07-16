@@ -154,12 +154,16 @@ The project is built in **8 incremental phases**, each leaving the application i
 - ✅ Data summary statistics endpoint
 - ✅ Test pipeline with sample data (10 incidents, 7 regions, 9,330 affected customers)
 
-### Phase 3: Impact Scoring Engine
-- Build explainable scoring algorithm
-- Combine severity + complaint volume + usage impact
-- Generate reasoning/explanation per incident
-- Rank incidents by impact
-- Unit test scoring logic
+### Phase 3: Impact Scoring Engine ✅
+- ✅ Implement explainable scoring algorithm
+- ✅ Combine severity (40%) + complaints (35%) + usage impact (25%)
+- ✅ Generate detailed explanations for each score
+- ✅ Rank incidents by impact score
+- ✅ Expose `/api/ranked-incidents` endpoint
+- ✅ Add regional ranking endpoint `/api/ranked-incidents/{region}`
+- ✅ Comprehensive unit tests (7/7 passing)
+- ✅ Test with real data pipeline (10 incidents scored successfully)
+- ✅ Scoring formula validated across critical, major, warning, and minor severities
 
 ### Phase 4: Anomaly Detection
 - Detect complaint spikes
@@ -228,23 +232,81 @@ Understand impact by geographic region:
 GET /health
 ```
 
-### Data Pipeline
+### Data Pipeline (Phase 2)
 ```
 GET /api/processed-data
 ```
-Returns cleaned and joined dataset.
+Returns cleaned and joined dataset with data quality metrics.
 
-### Incident Ranking
+```
+GET /api/data-quality
+```
+Returns validation metrics (join success rate, complete records, etc.).
+
+```
+GET /api/data-summary
+```
+Returns summary statistics (total incidents, regions, affected customers, etc.).
+
+### Incident Ranking (Phase 3)
 ```
 GET /api/ranked-incidents
 ```
-Returns incidents ranked by impact score with explanations.
+Returns all incidents ranked by impact score (highest to lowest).
 
-### Anomalies
+**Response Format:**
+```json
+{
+  "status": "success",
+  "total_incidents": 10,
+  "incidents": [
+    {
+      "outage_id": "INC-4029",
+      "region": "US-SOUTH-01",
+      "timestamp": "2026-07-15T10:15:00",
+      "severity": "Critical",
+      "duration_minutes": 180,
+      "overall_score": 75.0,
+      "rank": 1,
+      "severity_score": {
+        "level": "Critical",
+        "normalized_value": 1.0,
+        "contribution": 40.0
+      },
+      "complaint_score": {
+        "complaint_count": 3,
+        "max_escalation": 4,
+        "normalized_value": 0.85,
+        "contribution": 29.75
+      },
+      "usage_score": {
+        "avg_traffic_gbps": 550.5,
+        "peak_active_users": 105000,
+        "peak_utilization": 92.5,
+        "normalized_value": 0.75,
+        "contribution": 18.75
+      },
+      "explanation": "[HIGH] Impact Score: 75.0/100 | Severity: Critical incident | Complaints: 3 reports (escalation level 4) | Usage Impact: 105,000 users, 550.5 Gbps | Primary driver: SEVERITY"
+    }
+  ]
+}
+```
+
+**Scoring Formula:**
+- Impact Score = (0.40 × Severity) + (0.35 × Complaints) + (0.25 × Usage Impact)
+- All components normalized to 0-100 scale
+- Results ranked highest to lowest impact
+
+```
+GET /api/ranked-incidents/{region}
+```
+Returns incidents ranked by impact score for a specific region.
+
+### Anomalies (Phase 4)
 ```
 GET /api/anomalies
 ```
-Returns detected anomalies and flags.
+Returns detected anomalies and flags (coming in Phase 4).
 
 ## ⚙️ Environment Variables
 
@@ -332,10 +394,10 @@ git push -u origin feature/phase-X-description
 
 ## 📌 Status
 
-- **Current Phase**: 2 - Data Pipeline ✅
-- **Next Phase**: 3 - Impact Scoring Engine
+- **Current Phase**: 3 - Impact Scoring Engine ✅
+- **Next Phase**: 4 - Anomaly Detection
 
 ---
 
 **Last Updated**: July 16, 2026  
-**Version**: 0.2.0 - MVP Phase 2 Complete
+**Version**: 0.3.0 - MVP Phase 3 Complete
