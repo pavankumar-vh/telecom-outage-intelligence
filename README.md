@@ -197,12 +197,19 @@ The project is built in **8 incremental phases**, each leaving the application i
 - ✅ Dark theme with Tailwind CSS styling
 - ✅ Responsive design (mobile, tablet, desktop)
 
-### Phase 6: Incident Detail Views
-- Build incident detail drill-down screen
-- Show incident timeline
-- Display complaint history
-- Add regional impact view with map
-- Show impact explanation
+### Phase 6: Incident Detail Views ✅
+- ✅ Build incident detail drill-down screen
+- ✅ Show incident timeline with event progression
+- ✅ Display complaint history progression chart
+- ✅ Show impact metrics over time (traffic vs users)
+- ✅ Add regional incidents view with component breakdown
+- ✅ Show detailed impact explanation with score component breakdown
+- ✅ Link from incident table rows to detail views
+- ✅ Implement React Router for navigation
+- ✅ Support related incidents in same region with quick navigation
+- ✅ Add back navigation to dashboard
+- ✅ Responsive design for all screen sizes
+- ✅ Loading states and error handling
 
 ### Phase 7: Polish & UX
 - Add loading and error states
@@ -467,10 +474,10 @@ git push -u origin feature/phase-X-description
 
 ## 📌 Status
 
-- **Current Phase**: 5 - Dashboard MVP ✅
-- **Next Phase**: 6 - Incident Detail Views
+- **Current Phase**: 6 - Incident Detail Views ✅
+- **Next Phase**: 7 - Polish & UX
 
 ---
 
 **Last Updated**: July 16, 2026  
-**Version**: 0.5.0 - MVP Phase 5 Complete
+**Version**: 0.6.0 - MVP Phase 6 Complete
