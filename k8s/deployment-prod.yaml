@@ -1,0 +1,212 @@
+---
+# Telecom NOC Backend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telecom-noc-backend
+  namespace: production
+  labels:
+    app: telecom-noc
+    component: backend
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: telecom-noc
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: telecom-noc
+        component: backend
+    spec:
+      containers:
+      - name: backend
+        image: telecom-noc:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: LOG_LEVEL
+          value: "INFO"
+        - name: VITE_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: telecom-noc-config
+              key: api_url
+        resources:
+          requests:
+            cpu: 250m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+# Backend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: telecom-noc-backend-service
+  namespace: production
+spec:
+  selector:
+    app: telecom-noc
+    component: backend
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 8000
+    targetPort: 8000
+---
+# Telecom NOC Frontend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: telecom-noc-frontend
+  namespace: production
+  labels:
+    app: telecom-noc
+    component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: telecom-noc
+      component: frontend
+  template:
+    metadata:
+      labels:
+        app: telecom-noc
+        component: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: telecom-noc:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: VITE_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: telecom-noc-config
+              key: api_url
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+---
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: telecom-noc-frontend-service
+  namespace: production
+spec:
+  selector:
+    app: telecom-noc
+    component: frontend
+  type: ClusterIP
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+---
+# Ingress Configuration
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: telecom-noc-ingress
+  namespace: production
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+  - hosts:
+    - noc.telecom.example.com
+    secretName: telecom-noc-tls
+  rules:
+  - host: noc.telecom.example.com
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: telecom-noc-backend-service
+            port:
+              number: 8000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: telecom-noc-frontend-service
+            port:
+              number: 3000
+---
+# ConfigMap for configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telecom-noc-config
+  namespace: production
+data:
+  api_url: "https://noc.telecom.example.com/api"
+  log_level: "INFO"
+---
+# HorizontalPodAutoscaler for Backend
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: telecom-noc-backend-hpa
+  namespace: production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: telecom-noc-backend
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80

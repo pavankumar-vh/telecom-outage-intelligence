@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database (optional - for future data persistence)
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: noc_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: telecom_noc
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U noc_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - noc-network
+
+  # Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: telecom-noc-backend
+    environment:
+      PYTHONUNBUFFERED: 1
+      VITE_API_URL: ${API_URL}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/data:/app/backend/data:ro
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - noc-network
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      target: frontend-builder
+    container_name: telecom-noc-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_URL: ${API_URL}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - noc-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: telecom-noc-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - noc-network
+    restart: unless-stopped
+
+  # Prometheus Monitoring (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: telecom-noc-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - noc-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  prometheus_data:
+
+networks:
+  noc-network:
+    driver: bridge
