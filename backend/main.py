@@ -1,7 +1,19 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import sys
+import logging
 from dotenv import load_dotenv
+
+# Setup path for imports
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # Load environment variables
 load_dotenv()
@@ -22,33 +34,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Import routers
+from backend.api import data, incidents, anomalies
+
+# Include routers
+app.include_router(data.router)
+app.include_router(incidents.router)
+app.include_router(anomalies.router)
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "message": "API is running"}
+    return {"status": "healthy", "message": "API is running", "version": "0.1.0"}
 
-@app.get("/api/processed-data")
-async def get_processed_data():
-    """Get processed outage data"""
+@app.get("/")
+async def root():
+    """Root endpoint"""
     return {
-        "message": "Data pipeline not yet implemented",
-        "status": "pending"
-    }
-
-@app.get("/api/ranked-incidents")
-async def get_ranked_incidents():
-    """Get ranked incidents by impact score"""
-    return {
-        "message": "Impact scoring not yet implemented",
-        "incidents": []
-    }
-
-@app.get("/api/anomalies")
-async def get_anomalies():
-    """Get detected anomalies"""
-    return {
-        "message": "Anomaly detection not yet implemented",
-        "anomalies": []
+        "service": "NOC Outage Impact API",
+        "version": "0.1.0",
+        "docs": "/docs",
+        "health": "/health"
     }
 
 if __name__ == "__main__":
