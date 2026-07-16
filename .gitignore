@@ -1,0 +1,67 @@
+# Frontend
+node_modules/
+dist/
+.env.local
+.env.*.local
+*.log
+pnpm-debug.log*
+yarn-error.log*
+vite.config.js.timestamp-*
+.vite/
+
+# Backend
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+venv/
+env/
+ENV/
+.venv
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Dashboard / Streamlit
+.streamlit/
+.streamlit/secrets.toml
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+*.db
+*.sqlite
+*.sqlite3
+
+# Data files
+data/*.csv
+data/*.json
+!data/.gitkeep

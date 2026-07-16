@@ -1,387 +1,338 @@
-# Outage Impact Prioritization System
+# NOC Outage Impact Prioritization System
 
-> A data-driven outage prioritization platform that helps Network Operations Centers (NOC) prioritize incidents based on **real customer and business impact**, rather than technical severity alone.
+A comprehensive MVP for helping telecom Network Operations Centers (NOCs) prioritize outages by combining network alerts, customer complaints, and usage metrics into a single, explainable impact score.
 
----
+## Project Overview
 
-## Overview
+This application addresses a critical gap in telecom outage management: currently, operators decide outage priorities based on technical severity alerts alone, without visibility into actual customer impact. 
 
-Telecom operators often manage outages using multiple disconnected systems:
+By centralizing three data sources:
+- **Network Outage Alerts** - Technical severity and scope
+- **Customer Complaint Logs** - Voice of customer
+- **Usage Metrics** - Business impact (affected traffic volume)
 
-- Network outage alerts
-- Customer complaint logs
-- Network usage metrics
-
-Because these systems operate independently, outage prioritization is usually based only on technical severity. This can result in high-impact customer outages being addressed later than less impactful technical incidents.
-
-The **Outage Impact Prioritization System** integrates these data sources into a single analytics platform that calculates an explainable impact score, ranks outages automatically, and highlights unusual regional patterns.
+The system calculates an explainable **Impact Score** that reflects real business impact, allowing teams to prioritize what truly matters first.
 
 ---
 
-## Project Objectives
+## 🚀 Technology Stack
 
-- Integrate outage alerts, complaint data, and network usage metrics
-- Calculate an explainable outage impact score
-- Automatically rank outages based on business impact
-- Detect regional anomalies in complaint trends
-- Provide an interactive dashboard for Network Operations teams
-- Improve decision-making with transparent scoring logic
+### Frontend
+- **React 18** - UI library
+- **Vite** - Build tool for fast development
+- **Tailwind CSS** - Utility-first styling
+- **React Router** - Navigation
+- **Recharts** - Data visualization
+- **React Icons** - Icon library
 
----
+### Backend
+- **Python 3.10+**
+- **FastAPI** - Modern, fast web framework
+- **Pandas** - Data processing and analysis
+- **NumPy** - Numerical computations
 
-## Features
+### Dashboard
+- **Streamlit** - Data dashboard framework
 
-- Data ingestion from three independent datasets
-- Automated data cleaning and validation
-- Unified outage dataset
-- Impact score calculation using:
-  - Technical severity
-  - Customer complaint volume
-  - Network usage
-- Dynamic outage ranking
-- Region, severity, and time-based filtering
-- Explainable scoring breakdown
-- Regional anomaly detection
-- Interactive Streamlit dashboard
-- Report export functionality
+### Version Control
+- **Git** - Distributed version control
+- **GitHub** - Repository hosting
 
----
+## 📁 Project Structure
 
-##  System Architecture
-
-```text
-                Outage Alerts
-                      │
-                      │
-Customer Complaints ──┼──► Data Cleaning & Validation
-                      │
-                      │
-                Usage Metrics
-                      │
-                      ▼
-               Data Integration
-                      │
-                      ▼
-           Impact Score Calculation
-                      │
-                      ▼
-          Outage Prioritization Engine
-                      │
-          ┌───────────┴───────────┐
-          ▼                       ▼
-  Streamlit Dashboard      Export Reports
+```
+telecom-outage-intelligence/
+├── frontend/                    # React + Vite application
+│   ├── src/
+│   │   ├── components/         # Reusable React components
+│   │   ├── pages/              # Page-level components
+│   │   ├── layouts/            # Layout wrappers
+│   │   ├── hooks/              # Custom React hooks
+│   │   ├── services/           # API client services
+│   │   ├── assets/             # Images, icons, etc.
+│   │   ├── App.jsx             # Main app component
+│   │   ├── main.jsx            # Entry point
+│   │   └── index.css           # Global styles
+│   ├── public/                 # Static assets
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   └── index.html
+│
+├── backend/                     # FastAPI application
+│   ├── api/                    # API route handlers
+│   │   ├── data.py             # Data ingestion endpoints
+│   │   ├── incidents.py        # Incident ranking endpoints
+│   │   └── anomalies.py        # Anomaly detection endpoints
+│   ├── services/               # Business logic layer
+│   ├── models/                 # Pydantic models & schemas
+│   ├── utils/                  # Utility functions
+│   ├── main.py                 # FastAPI app entry point
+│   ├── requirements.txt        # Python dependencies
+│   └── .env.example            # Environment variables template
+│
+├── dashboard/                  # Streamlit dashboard
+│   ├── app.py                  # Main dashboard application
+│   └── requirements.txt        # Python dependencies
+│
+├── data/                       # Data directory
+│   ├── outage_alerts.csv       # Network outage alerts (Phase 2)
+│   ├── complaint_logs.csv      # Customer complaints (Phase 2)
+│   ├── usage_metrics.csv       # Regional usage data (Phase 2)
+│   └── README.md               # Data documentation
+│
+├── docs/                       # Project documentation
+│   ├── ARCHITECTURE.md         # System architecture
+│   ├── API.md                  # API documentation
+│   └── DEPLOYMENT.md           # Deployment guide
+│
+├── .gitignore                  # Git ignore rules
+├── README.md                   # This file
+└── PHASE_ROADMAP.md           # Development phase breakdown
 ```
 
----
+## ⚡ Quick Start
 
-##  Project Structure
+### Prerequisites
+- **Node.js 18+** and npm (for frontend)
+- **Python 3.10+** (for backend and dashboard)
+- **Git**
 
-```text
-Outage-Impact-Prioritization/
-│
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── sample/
-│
-├── notebooks/
-│
-├── src/
-│   ├── data_ingestion.py
-│   ├── preprocessing.py
-│   ├── scoring.py
-│   ├── anomaly_detection.py
-│   ├── dashboard.py
-│   └── utils.py
-│
-├── reports/
-│
-├── app.py
-│
-├── requirements.txt
-│
-├── README.md
-│
-└── LICENSE
-```
-
----
-
-##  Tech Stack
-
-| Component | Technology |
-|------------|------------|
-| Programming Language | Python |
-| Data Processing | Pandas, NumPy |
-| Visualization | Plotly, Matplotlib |
-| Dashboard | Streamlit |
-| Machine Learning / Analytics | Scikit-learn |
-| Data Validation | Pandera / Custom Validation |
-| Version Control | Git & GitHub |
-
----
-
-##  Impact Score Methodology
-
-Each outage receives a composite score based on three major factors.
-
-| Factor | Description |
-|----------|-------------|
-| Technical Severity | Severity level reported by the network |
-| Customer Complaints | Number of complaints received |
-| Usage Impact | Network traffic affected in the region |
-
-Example scoring formula:
-
-```text
-Impact Score =
-(0.40 × Severity Score)
-+ (0.35 × Complaint Score)
-+ (0.25 × Usage Score)
-```
-
-> **Note:** The weights are configurable and can be refined using historical outage data and operational feedback.
-
----
-
-## 📈Dashboard
-
-The Streamlit dashboard provides:
-
-- Ranked outage list
-- Impact score explanation
-- Regional outage analysis
-- Complaint trends
-- Usage impact visualization
-- Severity distribution
-- Region and time filters
-- Exportable reports
-
----
-
-## Functional Requirements
-
-The system supports:
-
-- Importing outage alerts
-- Importing customer complaints
-- Importing usage metrics
-- Dataset integration
-- Data quality validation
-- Impact score calculation
-- Automatic outage re-ranking
-- Regional anomaly detection
-- Dashboard visualization
-- Report export
-
----
-
-## Success Metrics
-
-The project will be considered successful if it achieves:
-
-- ≥80% agreement with expert outage prioritization
-- Dashboard updates within **5 minutes** of new outage data
-- ≥95% successful record matching across datasets
-- Reduced outage prioritization time
-- Dashboard usability for non-technical users
-
----
-
-## 📁 Data Sources
-
-The project combines three datasets.
-
-### 1. Outage Alerts
-
-Contains information such as:
-
-- Outage ID
-- Region
-- Timestamp
-- Severity
-- Network component
-- Status
-
-### 2. Customer Complaints
-
-Contains:
-
-- Complaint ID
-- Region
-- Timestamp
-- Complaint category
-- Customer count
-
-### 3. Usage Metrics
-
-Contains:
-
-- Region
-- Timestamp
-- Network traffic
-- Active users
-- Peak utilization
-
----
-
-## Data Pipeline
-
-```text
-Raw Data
-     │
-     ▼
-Cleaning
-     │
-     ▼
-Validation
-     │
-     ▼
-Integration
-     │
-     ▼
-Impact Score
-     │
-     ▼
-Ranking
-     │
-     ▼
-Dashboard
-```
-
----
-
-## Getting Started
-
-### 1. Clone the repository
+### Frontend Setup
 
 ```bash
-git clone https://github.com/yourusername/Outage-Impact-Prioritization.git
-cd Outage-Impact-Prioritization
+cd frontend
+npm install
+npm run dev
 ```
 
-### 2. Create a virtual environment
+The frontend will be available at `http://localhost:5173`
+
+### Backend Setup
 
 ```bash
+cd backend
 python -m venv venv
-```
-
-Activate it:
-
-**Windows**
-
-```bash
-venv\Scripts\activate
-```
-
-**Linux/macOS**
-
-```bash
-source venv/bin/activate
-```
-
-### 3. Install dependencies
-
-```bash
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
+python main.py
 ```
 
-### 4. Run the Streamlit dashboard
+The API will be available at `http://localhost:8000`
+
+### Dashboard Setup
 
 ```bash
+cd dashboard
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 streamlit run app.py
 ```
 
----
+The dashboard will be available at `http://localhost:8501`
 
-## Future Enhancements
+## 🗺️ Development Roadmap
 
-- Real-time streaming with Kafka
-- Predictive outage impact using Machine Learning
-- Crew dispatch recommendations
-- SLA breach prediction
-- Mobile dashboard
-- Automated alert notifications
-- Geographic outage heat maps
+The project is built in **8 incremental phases**, each leaving the application in a working state:
 
----
+### Phase 1: Project Initialization ✅ 
+- ✅ Set up React + Vite frontend with Tailwind CSS
+- ✅ Initialize FastAPI backend
+- ✅ Set up Streamlit dashboard
+- ✅ Create project folder structure
+- ✅ Configure environment files and dependencies
 
-## Stakeholders
+### Phase 2: Data Pipeline
+- Load and clean datasets (outage alerts, complaints, usage)
+- Normalize columns and handle missing values
+- Join datasets on region and timestamp
+- Validate data quality
+- Expose `/api/processed-data` endpoint
 
-### Primary Users
+### Phase 3: Impact Scoring Engine
+- Build explainable scoring algorithm
+- Combine severity + complaint volume + usage impact
+- Generate reasoning/explanation per incident
+- Rank incidents by impact
+- Unit test scoring logic
 
-- NOC Engineers
+### Phase 4: Anomaly Detection
+- Detect complaint spikes
+- Identify regional anomalies
+- Flag unusual patterns
+- Integrate anomalies into incident ranking
 
-### Secondary Users
+### Phase 5: Dashboard MVP
+- Build KPI cards (active outages, avg score, regions)
+- Create incident table with impact scores
+- Add region, severity, and time filters
+- Display trend charts and complaint graphs
+- Connect to backend APIs
 
-- NOC Managers
-- Customer Support Leads
-- Regional Operations Analysts
+### Phase 6: Incident Detail Views
+- Build incident detail drill-down screen
+- Show incident timeline
+- Display complaint history
+- Add regional impact view with map
+- Show impact explanation
 
-### Decision Makers
+### Phase 7: Polish & UX
+- Add loading and error states
+- Implement empty states
+- Add search functionality
+- Support sorting and pagination
+- Add CSV export capability
+- Optimize component performance
 
-- Head of Network Operations
+### Phase 8: MVP Completion
+- End-to-end testing
+- Bug fixes and optimization
+- Final documentation
+- Production-ready build
+- Deployment setup
 
-### Business Beneficiaries
+## 🎯 Key Features
 
-- Finance and Leadership
-- Telecom Customers
+### Explainable Impact Scores
+Each outage gets a score based on:
+- **Technical Severity** (from alerts)
+- **Customer Impact** (complaint volume and spike rate)
+- **Business Impact** (affected customer base and traffic volume)
 
----
+The reasoning is always transparent, showing which factors contributed most to the ranking.
 
-## Project Scope
+### Smart Anomaly Detection
+Automatically flags unusual patterns:
+- Complaint spikes in regions
+- Outages affecting unexpectedly large customer bases
+- Regional deviations from normal patterns
 
-### Included
+### Real-time Ranking
+As new data arrives, the incident priority automatically re-ranks, ensuring operators always see the highest-impact items first.
 
-- Data integration
-- Data cleaning
-- Impact scoring
-- Outage ranking
-- Basic anomaly detection
-- Streamlit dashboard
+### Regional Intelligence
+Understand impact by geographic region:
+- Which regions are most affected
+- Regional health trends
+- Correlation between outages and complaints
 
-### Excluded
+## 🔌 API Reference
 
-- Real-time streaming
-- Automatic repair dispatch
-- Future outage prediction
-- Mobile application
-
----
-
-## Contributing
-
-Contributions are welcome.
-
-1. Fork the repository.
-2. Create a feature branch.
-
-```bash
-git checkout -b feature-name
+### Health Check
+```
+GET /health
 ```
 
-3. Commit your changes.
+### Data Pipeline
+```
+GET /api/processed-data
+```
+Returns cleaned and joined dataset.
 
-```bash
-git commit -m "Add feature"
+### Incident Ranking
+```
+GET /api/ranked-incidents
+```
+Returns incidents ranked by impact score with explanations.
+
+### Anomalies
+```
+GET /api/anomalies
+```
+Returns detected anomalies and flags.
+
+## ⚙️ Environment Variables
+
+### Backend (.env)
+```
+ENVIRONMENT=development
+DEBUG=True
+API_HOST=0.0.0.0
+API_PORT=8000
+CORS_ORIGINS=["http://localhost:5173"]
 ```
 
-4. Push to your branch.
-
-```bash
-git push origin feature-name
+### Frontend (.env.local)
+```
+VITE_API_URL=http://localhost:8000
 ```
 
-5. Open a Pull Request.
+## 📊 Running Tests
 
----
+```bash
+# Backend tests (Phase 3+)
+cd backend
+pytest
+```
+
+## 🏗️ Building for Production
+
+### Frontend
+```bash
+cd frontend
+npm run build
+```
+
+Build artifacts will be in `frontend/dist/`
+
+### Backend
+```bash
+# Ensure all dependencies are installed
+pip install -r backend/requirements.txt
+```
+
+Run with production ASGI server:
+```bash
+cd backend
+gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+```
+
+## 📖 Documentation
+
+- [API Documentation](./docs/API.md) - Detailed endpoint documentation
+- [Architecture](./docs/ARCHITECTURE.md) - System design and data flow
+- [Deployment Guide](./docs/DEPLOYMENT.md) - Production deployment instructions
+
+## 💻 Code Quality Standards
+
+- **Clean Architecture** - Clear separation of concerns
+- **Reusable Components** - DRY principle throughout
+- **Meaningful Structure** - Logical folder organization
+- **Modular Code** - Single responsibility principle
+- **Minimal Comments** - Self-documenting code where possible
+- **Type Safety** - Pydantic models for API validation
+
+## 🌿 Git Workflow
+
+This project uses feature branches per development phase:
+
+```bash
+git checkout -b feature/phase-X-description
+# ... implement phase ...
+git commit -m "feat(phase-X): description"
+git push -u origin feature/phase-X-description
+```
+
+## 📝 Contributing
+
+1. Create a feature branch for your phase
+2. Implement features incrementally
+3. Ensure code compiles and tests pass
+4. Commit with descriptive messages
+5. Push to GitHub
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+[To be determined]
+
+## 📌 Status
+
+- **Current Phase**: 1 - Project Initialization ✅
+- **Next Phase**: 2 - Data Pipeline
 
 ---
 
-## Team
-
-Developed as part of a telecom analytics project focused on improving outage prioritization through data integration, explainable scoring, and operational intelligence.
+**Last Updated**: July 15, 2026  
+**Version**: 0.1.0 - MVP Phase 1 Complete
