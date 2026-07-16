@@ -41,7 +41,7 @@ export const ScoreBar = ({ score }) => {
 /**
  * Incident Row Component (Expandable)
  */
-export const IncidentRow = ({ incident, isExpanded, onToggle }) => {
+export const IncidentRow = ({ incident, isExpanded, onToggle, onIncidentClick }) => {
   const durationHours = (incident.duration_minutes / 60).toFixed(1);
   const hasAnomalies = incident.anomalies && incident.anomalies.length > 0;
 
@@ -147,6 +147,21 @@ export const IncidentRow = ({ incident, isExpanded, onToggle }) => {
                   </ul>
                 </div>
               )}
+
+              {/* Action Button */}
+              {onIncidentClick && (
+                <div className="col-span-2 flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onIncidentClick(incident.outage_id);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm font-semibold transition"
+                  >
+                    View Full Details
+                  </button>
+                </div>
+              )}
             </div>
           </td>
         </tr>
@@ -158,7 +173,7 @@ export const IncidentRow = ({ incident, isExpanded, onToggle }) => {
 /**
  * Incident Table Component
  */
-export const IncidentTable = ({ incidents = [], anomalies = {}, isLoading = false }) => {
+export const IncidentTable = ({ incidents = [], anomalies = {}, isLoading = false, onIncidentClick }) => {
   const [expandedRows, setExpandedRows] = useState(new Set());
 
   const toggleRow = (outageId) => {
@@ -220,6 +235,7 @@ export const IncidentTable = ({ incidents = [], anomalies = {}, isLoading = fals
               }}
               isExpanded={expandedRows.has(incident.outage_id)}
               onToggle={() => toggleRow(incident.outage_id)}
+              onIncidentClick={onIncidentClick}
             />
           ))}
         </tbody>

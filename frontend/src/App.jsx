@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { AlertCircle, RefreshCw } from 'react-icons/fa';
 import './App.css';
 import { KPIContainer } from './components/KPICards';
@@ -11,8 +12,11 @@ import {
   ComplaintImpactChart,
 } from './components/Charts';
 import { apiService } from './services/apiService';
+import IncidentDetail from './pages/IncidentDetail';
+import RegionalImpactView from './pages/RegionalImpactView';
 
-function App() {
+function Dashboard() {
+  const navigate = useNavigate();
   // State management
   const [incidents, setIncidents] = useState([]);
   const [anomalies, setAnomalies] = useState(null);
@@ -192,6 +196,7 @@ function App() {
             incidents={filteredIncidents}
             anomalies={anomalies}
             isLoading={loading}
+            onIncidentClick={(incidentId) => navigate(`/incident/${incidentId}`)}
           />
         </div>
 
@@ -206,6 +211,18 @@ function App() {
         )}
       </div>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/incident/:incidentId" element={<IncidentDetail />} />
+        <Route path="/regional/:region" element={<RegionalImpactView />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
