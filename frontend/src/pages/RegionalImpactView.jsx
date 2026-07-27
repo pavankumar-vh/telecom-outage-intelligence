@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowLeft, MapPin, AlertCircle, TrendingUp, Users } from 'react-icons/fa';
+import { FaArrowLeft, FaMapMarkerAlt, FaExclamationCircle, FaChartLine, FaUsers } from 'react-icons/fa';
 import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const RegionalImpactView = ({ incidents = [], region = null, onBack = () => {} }) => {
@@ -69,12 +69,12 @@ const RegionalImpactView = ({ incidents = [], region = null, onBack = () => {} }
         onClick={onBack}
         className="flex items-center gap-2 mb-8 text-blue-400 hover:text-blue-300 transition font-semibold"
       >
-        <ArrowLeft size={20} /> Back
+        <FaArrowLeft size={20} /> Back
       </button>
 
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <MapPin className="text-blue-400" size={28} />
+          <FaMapMarkerAlt className="text-blue-400" size={28} />
           <h1 className="text-4xl font-bold text-gray-100">Regional Impact Analysis</h1>
         </div>
         <p className="text-gray-400">Detailed view of incidents and impact metrics by region</p>
@@ -105,7 +105,7 @@ const RegionalImpactView = ({ incidents = [], region = null, onBack = () => {} }
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 backdrop-blur-lg">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-400 text-sm font-semibold">Total Incidents</span>
-            <AlertCircle className="text-red-400" size={20} />
+            <FaExclamationCircle className="text-red-400" size={20} />
           </div>
           <p className="text-3xl font-bold text-gray-100">{metrics.totalIncidents}</p>
         </div>
@@ -113,7 +113,7 @@ const RegionalImpactView = ({ incidents = [], region = null, onBack = () => {} }
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 backdrop-blur-lg">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-400 text-sm font-semibold">Average Impact Score</span>
-            <TrendingUp className="text-blue-400" size={20} />
+            <FaChartLine className="text-blue-400" size={20} />
           </div>
           <p className="text-3xl font-bold text-gray-100">{metrics.avgScore}</p>
         </div>
@@ -121,7 +121,7 @@ const RegionalImpactView = ({ incidents = [], region = null, onBack = () => {} }
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 backdrop-blur-lg">
           <div className="flex items-center justify-between mb-2">
             <span className="text-gray-400 text-sm font-semibold">Affected Customers</span>
-            <Users className="text-orange-400" size={20} />
+            <FaUsers className="text-orange-400" size={20} />
           </div>
           <p className="text-3xl font-bold text-gray-100">{metrics.totalAffected}</p>
         </div>

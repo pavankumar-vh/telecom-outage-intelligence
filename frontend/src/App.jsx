@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import { AlertCircle, RefreshCw } from 'react-icons/fa';
+import { FaExclamationCircle, FaRedo } from 'react-icons/fa';
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
 import { KPIContainer } from './components/KPICards';
@@ -143,7 +143,7 @@ function Dashboard() {
                 disabled={loading}
                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 px-4 py-2 rounded transition-colors"
               >
-                <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+                <FaRedo size={16} className={loading ? 'animate-spin' : ''} />
                 Refresh
               </button>
               {lastUpdated && (
@@ -159,7 +159,7 @@ function Dashboard() {
         {/* Error Alert */}
         {error && (
           <div className="mb-6 flex items-start gap-4 bg-red-900/20 border border-red-500/30 rounded-lg p-4">
-            <AlertCircle className="text-red-400 flex-shrink-0 mt-0.5" size={20} />
+            <FaExclamationCircle className="text-red-400 flex-shrink-0 mt-0.5" size={20} />
             <div>
               <h3 className="text-red-300 font-semibold">Error</h3>
               <p className="text-red-200/70 text-sm mt-1">{error}</p>

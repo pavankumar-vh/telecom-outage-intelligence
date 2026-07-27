@@ -1,12 +1,12 @@
 import React from 'react';
-import { BoxOpen, AlertTriangle, Search } from 'react-icons/fa';
+import { FaBoxOpen, FaExclamationTriangle, FaSearch } from 'react-icons/fa';
 
 /**
  * Empty State - No Incidents
  */
 export const EmptyIncidents = ({ onRefresh }) => (
   <div className="rounded-lg border border-gray-700 p-12 text-center bg-gray-900/30">
-    <BoxOpen className="text-gray-500 mx-auto mb-4" size={48} />
+    <FaBoxOpen className="text-gray-500 mx-auto mb-4" size={48} />
     <h3 className="text-lg font-semibold text-gray-300 mb-2">No Incidents Found</h3>
     <p className="text-gray-400 mb-6">
       There are currently no incidents matching your filters. Try adjusting your search criteria.
@@ -27,7 +27,7 @@ export const EmptyIncidents = ({ onRefresh }) => (
  */
 export const EmptySearchResults = ({ query, onClear }) => (
   <div className="rounded-lg border border-gray-700 p-12 text-center bg-gray-900/30">
-    <Search className="text-gray-500 mx-auto mb-4" size={48} />
+    <FaSearch className="text-gray-500 mx-auto mb-4" size={48} />
     <h3 className="text-lg font-semibold text-gray-300 mb-2">No Results for "{query}"</h3>
     <p className="text-gray-400 mb-6">
       No incidents match your search. Try a different search term or clear filters.
@@ -65,7 +65,7 @@ export const EmptyState = ({ title, description, icon: Icon = BoxOpen, action, a
  */
 export const InlineEmptyState = ({ message }) => (
   <div className="text-center py-8 text-gray-400">
-    <AlertTriangle className="mx-auto mb-2" size={24} />
+    <FaExclamationTriangle className="mx-auto mb-2" size={24} />
     <p className="text-sm">{message}</p>
   </div>
 );

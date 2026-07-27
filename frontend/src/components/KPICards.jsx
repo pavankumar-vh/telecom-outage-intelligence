@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, Users, Globe, TrendingUp } from 'react-icons/fa';
+import { FaExclamationTriangle, FaUsers, FaGlobe, FaChartLine } from 'react-icons/fa';
 
 /**
  * KPI Card Component
@@ -42,25 +42,25 @@ export const KPIContainer = ({ metrics }) => {
     {
       title: 'Active Outages',
       value: metrics?.activeOutages || 0,
-      icon: AlertTriangle,
+      icon: FaExclamationTriangle,
       color: metrics?.activeOutages > 3 ? 'red' : 'yellow',
     },
     {
       title: 'Avg Impact Score',
       value: metrics?.avgScore ? metrics.avgScore.toFixed(1) : '0.0',
-      icon: TrendingUp,
+      icon: FaChartLine,
       color: 'blue',
     },
     {
       title: 'Affected Customers',
       value: metrics?.affectedCustomers ? `${(metrics.affectedCustomers / 1000).toFixed(1)}K` : '0',
-      icon: Users,
+      icon: FaUsers,
       color: 'red',
     },
     {
       title: 'Regions Impacted',
       value: metrics?.regions || 0,
-      icon: Globe,
+      icon: FaGlobe,
       color: 'yellow',
     },
   ];

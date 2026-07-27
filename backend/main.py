@@ -6,7 +6,8 @@ import logging
 from dotenv import load_dotenv
 
 # Setup path for imports
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+backend_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(backend_dir))  # Add parent to path so we can import backend
 
 # Setup logging
 logging.basicConfig(
@@ -34,8 +35,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Import routers
-from backend.api import data, incidents, anomalies
+# Import routers (using relative imports from backend package)
+try:
+    from backend.api import data, incidents, anomalies
+except ImportError:
+    from api import data, incidents, anomalies
 
 # Include routers
 app.include_router(data.router)

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronDown, AlertTriangle, CheckCircle, Clock } from 'react-icons/fa';
+import { FaChevronDown, FaExclamationTriangle, FaCheckCircle, FaClock } from 'react-icons/fa';
 
 /**
  * Severity Badge Component
@@ -52,7 +52,7 @@ export const IncidentRow = ({ incident, isExpanded, onToggle, onIncidentClick })
         onClick={onToggle}
       >
         <td className="px-4 py-3">
-          <ChevronDown
+          <FaChevronDown
             className={`inline transition-transform ${isExpanded ? 'rotate-180' : ''}`}
             size={16}
           />
@@ -69,7 +69,7 @@ export const IncidentRow = ({ incident, isExpanded, onToggle, onIncidentClick })
         <td className="px-4 py-3 text-sm text-gray-400">{incident.complaint_count}</td>
         <td className="px-4 py-3 text-center">
           {hasAnomalies && (
-            <AlertTriangle size={16} className="text-red-400 inline" title="Anomalies detected" />
+            <FaExclamationTriangle size={16} className="text-red-400 inline" title="Anomalies detected" />
           )}
         </td>
       </tr>
@@ -188,7 +188,7 @@ export const IncidentTable = ({ incidents = [], anomalies = {}, isLoading = fals
 
   // Map anomalies by outage_id for quick lookup
   const anomaliesByOutage = {};
-  if (anomalies.incidents) {
+  if (anomalies?.incidents) {
     anomalies.incidents.forEach(inc => {
       anomaliesByOutage[inc.outage_id] = inc.anomaly_flags || [];
     });

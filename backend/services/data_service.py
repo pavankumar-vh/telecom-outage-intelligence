@@ -17,6 +17,7 @@ class DataService:
         self.complaints_df = None
         self.usage_df = None
         self.processed_df = None
+        self.validated = False
     
     def load_datasets(self) -> bool:
         """Load all three datasets from CSV files"""
@@ -208,18 +209,21 @@ class DataService:
         # Load datasets
         if not self.load_datasets():
             pipeline_status['errors'].append("Failed to load datasets")
+            self.validated = False
             return False, pipeline_status
         pipeline_status['loaded'] = True
         
         # Clean datasets
         if not self.clean_datasets():
             pipeline_status['errors'].append("Failed to clean datasets")
+            self.validated = False
             return False, pipeline_status
         pipeline_status['cleaned'] = True
         
         # Join datasets
         if not self.join_datasets():
             pipeline_status['errors'].append("Failed to join datasets")
+            self.validated = False
             return False, pipeline_status
         pipeline_status['joined'] = True
         
@@ -227,6 +231,7 @@ class DataService:
         validation = self.validate_data()
         pipeline_status['validated'] = validation['is_valid']
         pipeline_status['validation'] = validation
+        self.validated = validation['is_valid']
         
         if not validation['is_valid']:
             pipeline_status['errors'].extend(validation['validation_errors'])
