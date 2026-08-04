@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, X } from 'react-icons/fa';
+import { FaFilter, FaTimes } from 'react-icons/fa';
 
 /**
  * Filter Component
@@ -28,14 +28,14 @@ export const FilterBar = ({
   return (
     <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 mb-6 backdrop-blur-sm">
       <div className="flex items-center gap-3 mb-4">
-        <Filter size={18} className="text-gray-400" />
+        <FaFilter size={18} className="text-gray-400" />
         <h3 className="text-sm font-semibold text-gray-300">Filters</h3>
         {hasActiveFilters && (
           <button
             onClick={handleClearFilters}
             className="ml-auto text-xs text-gray-400 hover:text-gray-200 flex items-center gap-1"
           >
-            <X size={14} /> Clear all
+            <FaTimes size={14} /> Clear all
           </button>
         )}
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle, RefreshCw } from 'react-icons/fa';
+import { FaExclamationTriangle, FaRedoAlt } from 'react-icons/fa';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -30,7 +30,7 @@ class ErrorBoundary extends React.Component {
         <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 flex items-center justify-center p-6">
           <div className="max-w-md bg-gray-900 border border-gray-700 rounded-lg p-8 shadow-xl">
             <div className="flex items-center gap-3 mb-4">
-              <AlertCircle className="text-red-400" size={32} />
+              <FaExclamationTriangle className="text-red-400" size={32} />
               <h1 className="text-2xl font-bold text-gray-100">Something Went Wrong</h1>
             </div>
             
@@ -51,13 +51,13 @@ class ErrorBoundary extends React.Component {
                 onClick={this.handleReset}
                 className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold transition"
               >
-                <RefreshCw size={16} /> Go Home
+                <FaRedoAlt size={16} /> Go Home
               </button>
               <button
                 onClick={() => window.location.reload()}
                 className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 border border-gray-600 px-4 py-2 rounded font-semibold transition"
               >
-                <RefreshCw size={16} /> Refresh
+                <FaRedoAlt size={16} /> Refresh
               </button>
             </div>
           </div>

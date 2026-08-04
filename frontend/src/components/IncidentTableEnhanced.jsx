@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronDown, AlertTriangle, Search, ArrowUp, ArrowDown, Download } from 'react-icons/fa';
+import { FaChevronDown, FaExclamationTriangle, FaSearch, FaArrowUp, FaArrowDown, FaDownload } from 'react-icons/fa';
 import { EmptyIncidents } from './EmptyStates';
 import { TableRowSkeleton } from './LoadingStates';
 
@@ -53,7 +53,7 @@ const SortHeader = ({ label, sortKey, currentSort, onSort }) => {
     >
       {label}
       {isActive && (
-        currentSort.direction === 'asc' ? <ArrowUp size={14} /> : <ArrowDown size={14} />
+        currentSort.direction === 'asc' ? <FaArrowUp size={14} /> : <FaArrowDown size={14} />
       )}
     </button>
   );
@@ -73,7 +73,7 @@ export const IncidentRow = ({ incident, isExpanded, onToggle, onIncidentClick })
         onClick={onToggle}
       >
         <td className="px-4 py-3">
-          <ChevronDown
+          <FaChevronDown
             className={`inline transition-transform ${isExpanded ? 'rotate-180' : ''}`}
             size={16}
           />
@@ -90,7 +90,7 @@ export const IncidentRow = ({ incident, isExpanded, onToggle, onIncidentClick })
         <td className="px-4 py-3 text-sm text-gray-400">{incident.complaint_count}</td>
         <td className="px-4 py-3 text-center">
           {hasAnomalies && (
-            <AlertTriangle size={16} className="text-red-400 inline" title="Anomalies detected" />
+            <FaExclamationTriangle size={16} className="text-red-400 inline" title="Anomalies detected" />
           )}
         </td>
       </tr>
@@ -149,7 +149,7 @@ export const IncidentRow = ({ incident, isExpanded, onToggle, onIncidentClick })
               {hasAnomalies && (
                 <div className="col-span-2">
                   <h4 className="text-sm font-semibold text-gray-300 mb-2">
-                    <AlertTriangle size={14} className="inline mr-2 text-red-400" />
+                    <FaExclamationTriangle size={14} className="inline mr-2 text-red-400" />
                     Detected Anomalies
                   </h4>
                   <ul className="space-y-1 text-xs text-gray-400">
@@ -219,7 +219,7 @@ export const IncidentTable = ({
 
   // Map anomalies by outage_id
   const anomaliesByOutage = {};
-  if (anomalies.incidents) {
+  if (anomalies?.incidents) {
     anomalies.incidents.forEach(inc => {
       anomaliesByOutage[inc.outage_id] = inc.anomaly_flags || [];
     });
@@ -337,7 +337,7 @@ export const IncidentTable = ({
       {/* Search and Export Bar */}
       <div className="flex flex-col md:flex-row gap-3 mb-4">
         <div className="flex-1 relative">
-          <Search className="absolute left-3 top-3 text-gray-500" size={18} />
+          <FaSearch className="absolute left-3 top-3 text-gray-500" size={18} />
           <input
             type="text"
             placeholder="Search incidents..."
@@ -354,7 +354,7 @@ export const IncidentTable = ({
           disabled={sortedIncidents.length === 0}
           className="flex items-center gap-2 bg-green-600 hover:bg-green-700 disabled:opacity-50 px-4 py-2 rounded transition-colors font-semibold"
         >
-          <Download size={16} /> Export CSV
+          <FaDownload size={16} /> Export CSV
         </button>
       </div>
 
