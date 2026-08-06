@@ -47,27 +47,6 @@ services:
       - noc-network
     restart: unless-stopped
 
-  # Frontend
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile.prod
-      target: frontend-builder
-    container_name: telecom-noc-frontend
-    ports:
-      - "3000:3000"
-    environment:
-      VITE_API_URL: ${API_URL}
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
-    networks:
-      - noc-network
-    restart: unless-stopped
-
   # Nginx Reverse Proxy
   nginx:
     image: nginx:alpine
@@ -80,7 +59,6 @@ services:
       - ./ssl:/etc/nginx/ssl:ro
     depends_on:
       - backend
-      - frontend
     networks:
       - noc-network
     restart: unless-stopped

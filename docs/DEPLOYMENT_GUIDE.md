@@ -56,8 +56,6 @@ docker-compose -f docker-compose.prod.yml logs backend
 # Health check
 curl http://localhost:8000/api/health
 
-# Test frontend
-curl http://localhost:3000
 
 # Monitor logs
 docker-compose -f docker-compose.prod.yml logs -f
@@ -125,20 +123,6 @@ pip install -r requirements.txt
 gunicorn main:app -w 4 -b 0.0.0.0:8000 --timeout 60 --daemon
 ```
 
-#### Step 2: Set up frontend
-```bash
-cd frontend
-
-# Install dependencies
-npm install
-
-# Build for production
-npm run build
-
-# Serve with production server
-npm install -g serve
-serve -s dist -l 3000 -d
-```
 
 #### Step 3: Configure reverse proxy
 ```bash
@@ -153,58 +137,6 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
-### Option 4: Vercel (Frontend & Serverless Backend)
-
-Vercel provides a seamless deployment experience for the React frontend and can also host the FastAPI backend using Serverless Functions.
-
-#### Step 1: Prepare the Repository
-Ensure your repository is pushed to a Git provider (GitHub, GitLab, or Bitbucket) supported by Vercel.
-
-To deploy both the frontend and backend in a single Vercel project, create a `vercel.json` file in the root of your repository:
-```json
-{
-  "builds": [
-    {
-      "src": "frontend/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    },
-    {
-      "src": "backend/main.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/backend/main.py"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/frontend/dist/$1"
-    }
-  ]
-}
-```
-
-*Note: For the backend to work seamlessly on Vercel, ensure your `backend/requirements.txt` is present and up to date so Vercel installs the required Python dependencies.*
-
-#### Step 2: Deploy via Vercel Dashboard
-1. Log in to [Vercel](https://vercel.com/) and click **Add New** > **Project**.
-2. Import your Git repository.
-3. **Framework Preset**: Vercel will likely detect **Vite** for the frontend. 
-4. **Root Directory**: Keep it as the repository root if using the `vercel.json` above. If you prefer to deploy *only* the frontend, you can set the Root Directory to `frontend`.
-5. **Build Command**: Set to `cd frontend && npm install && npm run build` (or leave default if Vercel detects it correctly).
-6. **Output Directory**: Set to `frontend/dist`.
-7. **Environment Variables**: Add your frontend and backend production variables (e.g., `VITE_API_URL=/api`, `DATABASE_URL`).
-8. Click **Deploy**.
-
-#### Step 3: Verify Deployment
-- Vercel will provision a live `.vercel.app` URL (e.g., `https://telecom-outage-intelligence.vercel.app`).
-- Navigate to the URL to access the React application.
-- If the backend is included, requests to `/api/...` will automatically route to the FastAPI Serverless Functions.
 
 ## Configuration
 
@@ -231,12 +163,6 @@ SECRET_KEY=your_secret_key_here
 ALLOWED_HOSTS=noc.yourdomain.com
 ```
 
-#### Frontend (.env.production)
-```
-VITE_API_URL=https://noc.yourdomain.com/api
-VITE_ENV=production
-VITE_ENABLE_DEBUG=false
-```
 
 ### Nginx Configuration
 
@@ -245,9 +171,6 @@ upstream backend {
     server backend:8000;
 }
 
-upstream frontend {
-    server frontend:3000;
-}
 
 server {
     listen 80;
@@ -282,12 +205,6 @@ server {
         proxy_buffering off;
     }
 
-    # Frontend
-    location / {
-        proxy_pass http://frontend;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-    }
 
     # Cache static assets
     location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
@@ -323,8 +240,6 @@ curl https://noc.yourdomain.com/api/metrics
 # View backend logs
 docker-compose logs backend
 
-# View frontend logs
-docker-compose logs frontend
 
 # View nginx logs
 docker-compose exec nginx tail -f /var/log/nginx/access.log
@@ -377,8 +292,6 @@ tar -czf config_backup.tar.gz .env* *.conf
 # Increase backend replicas
 kubectl scale deployment telecom-noc-backend --replicas=5 -n production
 
-# Increase frontend replicas
-kubectl scale deployment telecom-noc-frontend --replicas=3 -n production
 ```
 
 ### Load Balancing

@@ -66,50 +66,6 @@ def build_backend():
     return success
 
 
-def build_frontend():
-    """Prepare frontend for production"""
-    print("\n🔨 Building frontend...")
-    
-    success = True
-    success &= run_command(
-        "cd frontend && npm install",
-        "Install frontend dependencies"
-    )
-    success &= run_command(
-        "cd frontend && npm run build",
-        "Build frontend with Vite"
-    )
-    
-    return success
-
-
-def create_production_env():
-    """Create production environment configuration"""
-    print("\n⚙️ Creating production environment...")
-    
-    env_template = """.env.production
-# Production Environment Configuration
-
-# API Configuration
-VITE_API_URL=https://api.telecom-noc.example.com
-VITE_ENV=production
-
-# Analytics (optional)
-VITE_GA_ID=
-
-# Feature Flags
-VITE_ENABLE_DEBUG=false
-VITE_ENABLE_DEV_TOOLS=false
-"""
-    
-    try:
-        with open('frontend/.env.production', 'w') as f:
-            f.write(env_template)
-        print("✅ Production environment file created")
-        return True
-    except Exception as e:
-        print(f"❌ Failed to create .env.production: {e}")
-        return False
 
 
 def generate_deployment_report():
@@ -125,11 +81,6 @@ def generate_deployment_report():
                 "status": "ready",
                 "tests_passed": True,
                 "endpoints": 8
-            },
-            "frontend": {
-                "status": "ready",
-                "build_size": "< 200kb",
-                "lazy_loading": True
             }
         },
         "checks": {
@@ -155,7 +106,6 @@ def cleanup():
     print("\n🧹 Cleaning up...")
     
     cleanup_items = [
-        'frontend/.env.development',
         'backend/.pytest_cache',
         'backend/__pycache__'
     ]
@@ -188,8 +138,6 @@ def main():
     # Run all deployment tasks
     all_success &= check_environment()
     all_success &= build_backend()
-    all_success &= build_frontend()
-    all_success &= create_production_env()
     all_success &= generate_deployment_report()
     all_success &= cleanup()
     
@@ -199,13 +147,11 @@ def main():
         print("✅ PRODUCTION DEPLOYMENT READY")
         print("\n📝 Next steps:")
         print("1. Review deployment-report.json")
-        print("2. Configure API endpoints in .env.production")
-        print("3. Deploy backend: gunicorn backend.main:app --workers 4 --bind 0.0.0.0:8000")
-        print("4. Deploy frontend: serve -s frontend/dist -p 3000")
-        print("5. Configure reverse proxy (nginx/Apache)")
-        print("6. Enable SSL/TLS certificates")
-        print("7. Set up monitoring and logging")
-        print("8. Configure database backups")
+        print("2. Deploy backend: gunicorn backend.main:app --workers 4 --bind 0.0.0.0:8000")
+        print("3. Configure reverse proxy (nginx/Apache)")
+        print("4. Enable SSL/TLS certificates")
+        print("5. Set up monitoring and logging")
+        print("6. Configure database backups")
         return 0
     else:
         print("❌ DEPLOYMENT PREPARATION FAILED")

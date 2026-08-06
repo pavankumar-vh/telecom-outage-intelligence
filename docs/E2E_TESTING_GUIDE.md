@@ -7,16 +7,16 @@ This guide covers comprehensive testing of the Telecom Outage Impact Prioritizat
 
 ### 1. Unit Testing
 **Backend:** Test individual service methods
-**Frontend:** Test component rendering and state management
+**Dashboard:** Test UI interaction and logic
 
 ```bash
 # Run backend unit tests
 cd backend
 python -m pytest tests/ -v
 
-# Run frontend unit tests
-cd frontend
-npm test
+# Run dashboard tests
+cd dashboard
+python -m pytest tests/ -v
 ```
 
 ### 2. Integration Testing
@@ -33,8 +33,8 @@ python -m pytest tests/test_integration.py -v
 
 #### Workflow 1: Dashboard Access
 1. Start backend: `cd backend && uvicorn main:app --reload`
-2. Start frontend: `cd frontend && npm run dev`
-3. Open http://localhost:5173
+2. Start dashboard: `cd dashboard && streamlit run app.py`
+3. Open http://localhost:8501
 4. Verify:
    - ✅ KPI cards load with correct metrics
    - ✅ Incident table displays data
@@ -130,11 +130,11 @@ Bundle Size (gzipped):      < 200KB
 ```bash
 # Using Lighthouse
 npm install -g lighthouse
-lighthouse http://localhost:5173 --view
+lighthouse http://localhost:8501 --view
 
 # Using WebPageTest
 # Visit: https://www.webpagetest.org
-# Test URL: http://localhost:5173
+# Test URL: http://localhost:8501
 ```
 
 ### 5. API Testing
@@ -162,7 +162,7 @@ curl http://localhost:8000/api/data/summary
 
 #### CORS Testing
 ```bash
-curl -H "Origin: http://localhost:5173" \
+curl -H "Origin: http://localhost:8501" \
      -H "Access-Control-Request-Method: GET" \
      http://localhost:8000/api/health -v
 # Check for CORS headers in response
@@ -312,10 +312,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Backend Tests
         run: cd backend && python -m pytest
-      - name: Frontend Tests
-        run: cd frontend && npm test
-      - name: Build Frontend
-        run: cd frontend && npm run build
       - name: Performance Check
         run: python scripts/performance-check.py
 ```
