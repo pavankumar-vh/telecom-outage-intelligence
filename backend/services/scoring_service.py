@@ -238,6 +238,9 @@ class ScoringService:
             complaint_score = self.calculate_complaint_score(
                 complaint_count, max_escalation
             )
+            # Make sure affected_customers gets included in complaint_score for completeness
+            complaint_score.affected_customers = incident_data.get("affected_customers", 0)
+            
             usage_score = self.calculate_usage_score(
                 avg_traffic_gbps, peak_active_users, peak_utilization
             )
@@ -261,6 +264,7 @@ class ScoringService:
                 timestamp=timestamp,
                 severity=severity,
                 duration_minutes=duration,
+                affected_customers=incident_data.get("affected_customers", 0),
                 overall_score=overall_score,
                 severity_score=severity_score,
                 complaint_score=complaint_score,

@@ -25,6 +25,7 @@ class ComplaintScore:
     """Score contribution from complaint volume and escalation."""
     complaint_count: int
     max_escalation: int
+    affected_customers: int = 0
     weight: float = 0.35
     normalized_value: float = 0.0  # 0.0-1.0
     contribution: float = 0.0  # weighted contribution
@@ -55,6 +56,7 @@ class IncidentScore:
     timestamp: str
     severity: str
     duration_minutes: int
+    affected_customers: int
     
     overall_score: float  # 0-100
     
@@ -72,6 +74,7 @@ class IncidentScore:
             "timestamp": self.timestamp,
             "severity": self.severity,
             "duration_minutes": self.duration_minutes,
+            "affected_customers": self.affected_customers,
             "overall_score": round(self.overall_score, 2),
             "rank": self.rank,
             "severity_score": self.severity_score.to_dict(),

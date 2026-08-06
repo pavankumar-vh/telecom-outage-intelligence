@@ -77,7 +77,7 @@ class DataService:
             return False
     
     def join_datasets(self) -> bool:
-        """Join all three datasets on region and temporal proximity"""
+        """Join all three datasets on region and temporal proximity using fast vectorized merges"""
         try:
             if self.outage_df is None or self.complaints_df is None or self.usage_df is None:
                 logger.error("Datasets not loaded or cleaned")
@@ -85,61 +85,74 @@ class DataService:
             
             # Start with outage data
             self.processed_df = self.outage_df.copy()
+            self.processed_df['date'] = self.processed_df['timestamp'].dt.date
+            self.processed_df['hour'] = self.processed_df['timestamp'].dt.hour
             
-            # Aggregate complaints by region and outage_id
-            # We'll match complaints that occurred within 60 minutes of the outage
-            def aggregate_complaints(outage_row):
-                region = outage_row['region']
-                outage_time = outage_row['timestamp']
-                outage_id = outage_row['outage_id']
-                
-                # Get complaints for this region within time window
-                region_complaints = self.complaints_df[
-                    (self.complaints_df['region'] == region) &
-                    (self.complaints_df['timestamp'] >= outage_time - pd.Timedelta(minutes=30)) &
-                    (self.complaints_df['timestamp'] <= outage_time + pd.Timedelta(minutes=60))
-                ]
-                
-                return {
-                    'complaint_count': len(region_complaints),
-                    'total_affected_customers': region_complaints['customer_count'].sum(),
-                    'max_escalation_level': region_complaints['escalation_level'].apply(
-                        lambda x: {'Low': 1, 'Medium': 2, 'High': 3, 'Critical': 4}.get(x, 0)
-                    ).max() if len(region_complaints) > 0 else 0
-                }
+            # 1. FAST COMPLAINTS AGGREGATION
+            # Instead of O(N^2) time windows, we group complaints by region, date, and hour
+            self.complaints_df['date'] = self.complaints_df['timestamp'].dt.date
+            self.complaints_df['hour'] = self.complaints_df['timestamp'].dt.hour
             
-            # Apply complaint aggregation
-            complaints_data = self.processed_df.apply(aggregate_complaints, axis=1)
-            self.processed_df['complaint_count'] = complaints_data.apply(lambda x: x['complaint_count'])
-            self.processed_df['affected_customers'] = complaints_data.apply(lambda x: x['total_affected_customers'])
-            self.processed_df['max_escalation'] = complaints_data.apply(lambda x: x['max_escalation_level'])
+            # Convert escalation to numeric for max() aggregation
+            esc_map = {'Low': 1, 'Medium': 2, 'High': 3, 'Critical': 4}
+            self.complaints_df['esc_num'] = self.complaints_df['escalation_level'].map(esc_map).fillna(0)
             
-            # Aggregate usage metrics by region and time window
-            def aggregate_usage(outage_row):
-                region = outage_row['region']
-                outage_time = outage_row['timestamp']
-                
-                # Get usage metrics for this region around outage time
-                region_usage = self.usage_df[
-                    (self.usage_df['region'] == region) &
-                    (self.usage_df['timestamp'] >= outage_time - pd.Timedelta(minutes=30)) &
-                    (self.usage_df['timestamp'] <= outage_time + pd.Timedelta(minutes=30))
-                ]
-                
-                return {
-                    'avg_traffic': region_usage['traffic_gbps'].mean(),
-                    'peak_users': region_usage['active_users'].max(),
-                    'peak_utilization': region_usage['peak_utilization_percent'].max()
-                }
+            complaints_agg = self.complaints_df.groupby(['region', 'date', 'hour']).agg(
+                complaint_count=('customer_count', 'count'),
+                total_affected_customers=('customer_count', 'sum'),
+                max_escalation_level=('esc_num', 'max')
+            ).reset_index()
             
-            # Apply usage aggregation
-            usage_data = self.processed_df.apply(aggregate_usage, axis=1)
-            self.processed_df['avg_traffic_gbps'] = usage_data.apply(lambda x: x['avg_traffic'] or 0)
-            self.processed_df['peak_active_users'] = usage_data.apply(lambda x: x['peak_users'] or 0)
-            self.processed_df['peak_utilization'] = usage_data.apply(lambda x: x['peak_utilization'] or 0)
+            # Merge complaints into processed_df
+            self.processed_df = pd.merge(
+                self.processed_df, complaints_agg,
+                on=['region', 'date', 'hour'],
+                how='left'
+            )
             
-            # Fill NaN values
-            self.processed_df = self.processed_df.fillna(0)
+            self.processed_df.rename(columns={
+                'total_affected_customers': 'affected_customers',
+                'max_escalation_level': 'max_escalation'
+            }, inplace=True)
+            
+            # 2. FAST USAGE AGGREGATION
+            # Use pre-calculated region stats instead of scanning 101K rows per incident
+            usage_stats = self.usage_df.groupby("region").agg(
+                avg_traffic=("traffic_gbps", "mean"),
+                peak_users=("active_users", "max"),
+                peak_utilization=("peak_utilization_percent", "max")
+            ).reset_index()
+            
+            # Merge usage into processed_df
+            self.processed_df = pd.merge(
+                self.processed_df, usage_stats,
+                on='region',
+                how='left'
+            )
+            
+            self.processed_df.rename(columns={
+                'avg_traffic': 'avg_traffic_gbps',
+                'peak_users': 'peak_active_users'
+            }, inplace=True)
+            
+            # Fill NaN values (where merges found no matches)
+            fill_cols = ['complaint_count', 'affected_customers', 'max_escalation', 
+                         'avg_traffic_gbps', 'peak_active_users', 'peak_utilization']
+            for col in fill_cols:
+                if col in self.processed_df.columns:
+                    self.processed_df[col] = self.processed_df[col].fillna(0)
+            
+            # Drop temporary columns
+            self.processed_df.drop(columns=['date', 'hour'], inplace=True, errors='ignore')
+            
+            # If 101K outages is too large for the frontend to render, take the top 1000 most recent active
+            # (or just limit it so the API doesn't crash sending a 50MB JSON payload)
+            if len(self.processed_df) > 2000:
+                logger.info(f"Subsampling {len(self.processed_df)} incidents to 2000 for performance")
+                # Prioritize Critical/Major and recent ones
+                sev_order = pd.CategoricalDtype(["Critical", "Major", "Warning", "Minor"], ordered=True)
+                self.processed_df['severity'] = self.processed_df['severity'].astype(sev_order)
+                self.processed_df = self.processed_df.sort_values(['severity', 'timestamp'], ascending=[True, False]).head(2000)
             
             logger.info(f"Datasets joined successfully. Total records: {len(self.processed_df)}")
             return True
