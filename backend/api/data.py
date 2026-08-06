@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api", tags=["data"])
 
 # Initialize data service
-data_service = DataService(data_dir="data")
+data_service = DataService(data_dir="../data")
 
 @router.on_event("startup")
 async def load_data():

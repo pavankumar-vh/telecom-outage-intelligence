@@ -39,7 +39,7 @@ st.set_page_config(
 # CONSTANTS
 # ══════════════════════════════════════════════════════════
 API_BASE     = os.environ.get("NOC_API_URL", "http://localhost:8000")
-DATA_DIR     = os.environ.get("NOC_DATA_DIR", "data")
+DATA_DIR     = os.environ.get("NOC_DATA_DIR", "../data")
 REFRESH_SECS = 30
 
 SEVERITY_COLORS = {

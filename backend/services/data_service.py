@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class DataService:
     """Service for data ingestion, cleaning, and integration"""
     
-    def __init__(self, data_dir: str = "data"):
+    def __init__(self, data_dir: str = "../data"):
         """Initialize data service with data directory path"""
         self.data_dir = data_dir
         self.outage_df = None
