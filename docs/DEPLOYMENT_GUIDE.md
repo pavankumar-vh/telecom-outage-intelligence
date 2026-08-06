@@ -153,6 +153,59 @@ sudo nginx -t
 sudo systemctl restart nginx
 ```
 
+### Option 4: Vercel (Frontend & Serverless Backend)
+
+Vercel provides a seamless deployment experience for the React frontend and can also host the FastAPI backend using Serverless Functions.
+
+#### Step 1: Prepare the Repository
+Ensure your repository is pushed to a Git provider (GitHub, GitLab, or Bitbucket) supported by Vercel.
+
+To deploy both the frontend and backend in a single Vercel project, create a `vercel.json` file in the root of your repository:
+```json
+{
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "backend/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/backend/main.py"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/frontend/dist/$1"
+    }
+  ]
+}
+```
+
+*Note: For the backend to work seamlessly on Vercel, ensure your `backend/requirements.txt` is present and up to date so Vercel installs the required Python dependencies.*
+
+#### Step 2: Deploy via Vercel Dashboard
+1. Log in to [Vercel](https://vercel.com/) and click **Add New** > **Project**.
+2. Import your Git repository.
+3. **Framework Preset**: Vercel will likely detect **Vite** for the frontend. 
+4. **Root Directory**: Keep it as the repository root if using the `vercel.json` above. If you prefer to deploy *only* the frontend, you can set the Root Directory to `frontend`.
+5. **Build Command**: Set to `cd frontend && npm install && npm run build` (or leave default if Vercel detects it correctly).
+6. **Output Directory**: Set to `frontend/dist`.
+7. **Environment Variables**: Add your frontend and backend production variables (e.g., `VITE_API_URL=/api`, `DATABASE_URL`).
+8. Click **Deploy**.
+
+#### Step 3: Verify Deployment
+- Vercel will provision a live `.vercel.app` URL (e.g., `https://telecom-outage-intelligence.vercel.app`).
+- Navigate to the URL to access the React application.
+- If the backend is included, requests to `/api/...` will automatically route to the FastAPI Serverless Functions.
+
 ## Configuration
 
 ### Environment Variables
