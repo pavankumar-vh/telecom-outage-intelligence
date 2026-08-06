@@ -1,6 +1,6 @@
 <div align="center">
   
-# 🛰️ NOC Intelligence Platform
+#  NOC Intelligence Platform
 ### *Enterprise Outage Impact Prioritization*
 
 [![Status](https://img.shields.io/badge/Status-Production_Ready-success.svg)](#-status)
@@ -11,7 +11,7 @@
 
 ---
 
-## 📖 Overview
+##  Overview
 
 The **NOC Intelligence Platform** is an enterprise-grade solution designed to revolutionize how Network Operations Centers (NOCs) handle telecom outages. 
 
@@ -21,7 +21,7 @@ By analyzing technical **Network Alerts**, real-time **Customer Complaint Logs**
 
 ---
 
-## ✨ Key Capabilities
+##  Key Capabilities
 
 - **Intelligent Impact Scoring:** Proprietary algorithm blending severity (40%), customer complaints (35%), and raw traffic impact (25%).
 - **Explainable AI:** Complete transparency into why an incident is prioritized, breaking down the exact drivers behind the score.
@@ -31,7 +31,7 @@ By analyzing technical **Network Alerts**, real-time **Customer Complaint Logs**
 
 ---
 
-## 🏗️ System Architecture
+##  System Architecture
 
 ### Frontend / Dashboard Layer
 - **Framework:** Streamlit for rapid data visualization and control panels.
@@ -45,7 +45,7 @@ By analyzing technical **Network Alerts**, real-time **Customer Complaint Logs**
 
 ---
 
-## 🚀 Quick Start Guide
+##  Quick Start Guide
 
 ### Prerequisites
 - **Python 3.10+**
@@ -85,7 +85,7 @@ streamlit run app.py
 
 ---
 
-## 📡 API Reference
+##  API Reference
 
 ### Data Pipeline & Health
 - `GET /health` - System health and uptime metrics.
@@ -101,7 +101,7 @@ streamlit run app.py
 
 ---
 
-## 🧪 Testing & Validation
+##  Testing & Validation
 
 The scoring and anomaly engines are fully unit-tested to ensure enterprise reliability.
 
@@ -112,7 +112,7 @@ pytest
 
 ---
 
-## 🔒 Security & Code Standards
+##  Security & Code Standards
 
 - **Clean Architecture:** Strict separation of data ingestion, business logic, and API presentation.
 - **Data Validation:** Pydantic models enforce strict type safety across all network payloads.

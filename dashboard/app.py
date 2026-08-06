@@ -30,7 +30,7 @@ import os
 # ══════════════════════════════════════════════════════════
 st.set_page_config(
     page_title="NOC Intelligence Platform",
-    page_icon="🛰️",
+    page_icon="",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -51,8 +51,8 @@ SEVERITY_COLORS = {
 SEVERITY_ORDER = ["Critical", "Major", "Warning", "Minor"]
 
 REGION_PALETTE = [
-    "#6366f1", "#f59e0b", "#10b981", "#3b82f6",
-    "#ec4899", "#8b5cf6", "#14b8a6", "#f97316",
+    "#ef4444", "#f59e0b", "#10b981", "#3b82f6",
+    "#ec4899", "#dc2626", "#14b8a6", "#f97316",
 ]
 
 # Real-world coordinates for each region
@@ -75,14 +75,14 @@ PLOTLY_BASE = dict(
     legend=dict(bgcolor="rgba(0,0,0,0)", font=dict(color="#94a3b8", size=11)),
     hovermode="x unified",
     xaxis=dict(
-        gridcolor="rgba(99,102,241,0.05)",
-        zerolinecolor="rgba(99,102,241,0.1)",
+        gridcolor="rgba(239,68,68,0.05)",
+        zerolinecolor="rgba(239,68,68,0.1)",
         tickfont=dict(color="#64748b", size=11),
         showgrid=True,
     ),
     yaxis=dict(
-        gridcolor="rgba(99,102,241,0.05)",
-        zerolinecolor="rgba(99,102,241,0.1)",
+        gridcolor="rgba(239,68,68,0.05)",
+        zerolinecolor="rgba(239,68,68,0.1)",
         tickfont=dict(color="#64748b", size=11),
         showgrid=True,
     ),
@@ -102,15 +102,15 @@ def inject_css():
 html, body, [class*="css"] { font-family:'Inter',sans-serif !important; }
 
 .stApp {
-    background: radial-gradient(ellipse at 20% 0%, rgba(99,102,241,0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(168,85,247,0.06) 0%, transparent 50%),
-                linear-gradient(160deg, #060b18 0%, #0a0f1e 40%, #080d1a 100%) !important;
+    background: radial-gradient(ellipse at 20% 0%, rgba(239,68,68,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(220,38,38,0.06) 0%, transparent 50%),
+                linear-gradient(160deg, #000000 0%, #09090b 40%, #09090b 100%) !important;
     color:#e2e8f0 !important;
 }
 
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #080d1a 0%, #0a0f1e 100%) !important;
-    border-right:1px solid rgba(99,102,241,0.18) !important;
+    background: linear-gradient(180deg, #09090b 0%, #09090b 100%) !important;
+    border-right:1px solid rgba(239,68,68,0.18) !important;
     box-shadow: 4px 0 24px rgba(0,0,0,0.4) !important;
 }
 [data-testid="stSidebar"] * { color:#cbd5e1 !important; }
@@ -120,26 +120,26 @@ html, body, [class*="css"] { font-family:'Inter',sans-serif !important; }
 [data-testid="stSidebar"] .stDateInput label { color:#64748b !important; font-size:0.7rem !important; letter-spacing:0.08em !important; text-transform:uppercase !important; }
 
 ::-webkit-scrollbar { width:5px; height:5px; }
-::-webkit-scrollbar-track { background:#060b18; }
-::-webkit-scrollbar-thumb { background:linear-gradient(180deg,#6366f1,#8b5cf6); border-radius:99px; }
+::-webkit-scrollbar-track { background:#000000; }
+::-webkit-scrollbar-thumb { background:linear-gradient(180deg,#ef4444,#dc2626); border-radius:99px; }
 
 /* Header */
 .noc-header {
-    background: linear-gradient(135deg,rgba(99,102,241,0.12) 0%,rgba(139,92,246,0.08) 50%,rgba(59,130,246,0.12) 100%);
-    border:1px solid rgba(99,102,241,0.25); border-radius:20px;
+    background: linear-gradient(135deg,rgba(239,68,68,0.12) 0%,rgba(220,38,38,0.08) 50%,rgba(59,130,246,0.12) 100%);
+    border:1px solid rgba(239,68,68,0.25); border-radius:20px;
     padding:32px 40px; margin-bottom:32px; position:relative; overflow:hidden;
 }
 .noc-header::before {
     content:''; position:absolute; top:-60%; left:-20%; width:60%; height:200%;
-    background:radial-gradient(ellipse, rgba(99,102,241,0.08) 0%, transparent 70%); pointer-events:none;
+    background:radial-gradient(ellipse, rgba(239,68,68,0.08) 0%, transparent 70%); pointer-events:none;
 }
 .noc-header::after {
     content:''; position:absolute; bottom:0; right:0; left:0; height:1px;
-    background:linear-gradient(90deg,transparent,rgba(99,102,241,0.4),transparent);
+    background:linear-gradient(90deg,transparent,rgba(239,68,68,0.4),transparent);
 }
 .noc-header-title {
     font-size:1.9rem; font-weight:900; letter-spacing:-0.02em;
-    background:linear-gradient(135deg,#a5b4fc 0%,#c084fc 40%,#38bdf8 100%);
+    background:linear-gradient(135deg,#fca5a5 0%,#ef4444 40%,#38bdf8 100%);
     -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin:0; padding:0;
 }
 .noc-header-sub { color:#475569; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; margin-top:6px; }
@@ -152,21 +152,21 @@ html, body, [class*="css"] { font-family:'Inter',sans-serif !important; }
 /* KPI Cards */
 .kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
 .kpi-card {
-    background:rgba(10,15,30,0.85); border-radius:16px; padding:24px;
-    border:1px solid rgba(99,102,241,0.18); backdrop-filter:blur(16px);
+    background:rgba(9,9,11,0.85); border-radius:16px; padding:24px;
+    border:1px solid rgba(239,68,68,0.18); backdrop-filter:blur(16px);
     position:relative; overflow:hidden;
     transition:transform 0.2s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
-.kpi-card:hover { transform:translateY(-3px); border-color:rgba(99,102,241,0.4); box-shadow:0 8px 32px rgba(99,102,241,0.12); }
+.kpi-card:hover { transform:translateY(-3px); border-color:rgba(239,68,68,0.4); box-shadow:0 8px 32px rgba(239,68,68,0.12); }
 .kpi-card::before { content:''; position:absolute; top:0;left:0;right:0;height:2px;border-radius:16px 16px 0 0; }
-.kpi-card.indigo::before { background:linear-gradient(90deg,#6366f1,#818cf8); }
+.kpi-card.indigo::before { background:linear-gradient(90deg,#ef4444,#fca5a5); }
 .kpi-card.red::before    { background:linear-gradient(90deg,#ef4444,#f97316); }
-.kpi-card.purple::before { background:linear-gradient(90deg,#a855f7,#ec4899); }
+.kpi-card.purple::before { background:linear-gradient(90deg,#dc2626,#ec4899); }
 .kpi-card.amber::before  { background:linear-gradient(90deg,#f59e0b,#eab308); }
 .kpi-glow { position:absolute; top:-20px; right:-20px; width:100px; height:100px; border-radius:50%; opacity:0.04; pointer-events:none; }
-.kpi-card.indigo .kpi-glow { background:#6366f1; }
+.kpi-card.indigo .kpi-glow { background:#ef4444; }
 .kpi-card.red    .kpi-glow { background:#ef4444; }
-.kpi-card.purple .kpi-glow { background:#a855f7; }
+.kpi-card.purple .kpi-glow { background:#dc2626; }
 .kpi-card.amber  .kpi-glow { background:#f59e0b; }
 .kpi-label { font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#475569; margin-bottom:12px; }
 .kpi-value { font-size:2.6rem; font-weight:900; color:#f1f5f9; line-height:1; letter-spacing:-0.02em; }
@@ -175,9 +175,9 @@ html, body, [class*="css"] { font-family:'Inter',sans-serif !important; }
 
 /* Section headers */
 .section-header { display:flex; align-items:center; gap:12px; margin:28px 0 18px; }
-.section-header-bar { width:3px; height:24px; border-radius:99px; background:linear-gradient(180deg,#6366f1,#a855f7); }
+.section-header-bar { width:3px; height:24px; border-radius:99px; background:linear-gradient(180deg,#ef4444,#dc2626); }
 .section-header-title { font-size:0.85rem; font-weight:700; color:#64748b; letter-spacing:0.1em; text-transform:uppercase; }
-.section-header-count { background:rgba(99,102,241,0.15); border:1px solid rgba(99,102,241,0.25); color:#818cf8; font-size:0.7rem; font-weight:700; padding:2px 10px; border-radius:99px; }
+.section-header-count { background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.25); color:#fca5a5; font-size:0.7rem; font-weight:700; padding:2px 10px; border-radius:99px; }
 
 /* Badges */
 .badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:99px; font-size:0.68rem; font-weight:700; letter-spacing:0.04em; }
@@ -193,7 +193,7 @@ html, body, [class*="css"] { font-family:'Inter',sans-serif !important; }
 
 /* Score bar */
 .sbar { display:flex; align-items:center; gap:8px; }
-.sbar-track { flex:1; height:5px; background:rgba(99,102,241,0.12); border-radius:99px; overflow:hidden; }
+.sbar-track { flex:1; height:5px; background:rgba(239,68,68,0.12); border-radius:99px; overflow:hidden; }
 .sbar-fill { height:100%; border-radius:99px; }
 .sbar-fill.c1 { background:linear-gradient(90deg,#ef4444,#f97316); }
 .sbar-fill.c2 { background:linear-gradient(90deg,#f97316,#eab308); }
@@ -214,22 +214,22 @@ html, body, [class*="css"] { font-family:'Inter',sans-serif !important; }
 .flag-sev.medium { color:#eab308; }
 .flag-sev.low    { color:#22c55e; }
 .flag-desc { font-size:0.78rem; color:#94a3b8; margin-bottom:4px; }
-.flag-rec  { font-size:0.73rem; color:#6366f1; font-style:italic; }
+.flag-rec  { font-size:0.73rem; color:#ef4444; font-style:italic; }
 
 /* Explanation */
-.expl-box { background:rgba(99,102,241,0.07); border:1px solid rgba(99,102,241,0.22); border-radius:10px; padding:12px 16px; margin-top:10px; }
-.expl-label { font-size:0.65rem; font-weight:700; color:#6366f1; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:5px; }
+.expl-box { background:rgba(239,68,68,0.07); border:1px solid rgba(239,68,68,0.22); border-radius:10px; padding:12px 16px; margin-top:10px; }
+.expl-label { font-size:0.65rem; font-weight:700; color:#ef4444; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:5px; }
 .expl-text  { font-size:0.78rem; color:#94a3b8; line-height:1.6; }
 
 /* Stat pair */
-.stat-pair { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(99,102,241,0.07); }
+.stat-pair { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid rgba(239,68,68,0.07); }
 .stat-pair:last-child { border-bottom:none; }
 .stat-key { font-size:0.77rem; color:#475569; }
 .stat-val { font-size:0.77rem; font-weight:600; color:#e2e8f0; font-family:'JetBrains Mono',monospace; }
 
 /* Map container */
 .map-container {
-    background:rgba(10,15,30,0.85); border:1px solid rgba(99,102,241,0.22);
+    background:rgba(9,9,11,0.85); border:1px solid rgba(239,68,68,0.22);
     border-radius:16px; overflow:hidden;
 }
 .map-legend-item { display:flex; align-items:center; gap:8px; font-size:0.75rem; color:#94a3b8; }
@@ -238,42 +238,42 @@ html, body, [class*="css"] { font-family:'Inter',sans-serif !important; }
 /* Nav radio */
 div[data-testid="stRadio"] > div { display:flex; flex-direction:column; gap:4px; }
 div[data-testid="stRadio"] label {
-    background:rgba(10,15,30,0.6); border:1px solid rgba(99,102,241,0.15);
+    background:rgba(9,9,11,0.6); border:1px solid rgba(239,68,68,0.15);
     border-radius:10px; padding:10px 14px !important; cursor:pointer;
     font-size:0.82rem !important; font-weight:500 !important; transition:all 0.18s ease;
 }
-div[data-testid="stRadio"] label:hover { border-color:rgba(99,102,241,0.35); background:rgba(99,102,241,0.08); }
+div[data-testid="stRadio"] label:hover { border-color:rgba(239,68,68,0.35); background:rgba(239,68,68,0.08); }
 
 /* Expander */
 details summary {
-    background:rgba(10,15,30,0.7) !important; border:1px solid rgba(99,102,241,0.18) !important;
+    background:rgba(9,9,11,0.7) !important; border:1px solid rgba(239,68,68,0.18) !important;
     border-radius:12px !important; padding:14px 18px !important; color:#94a3b8 !important;
     font-size:0.85rem !important; transition:border-color 0.2s ease, background 0.2s ease;
 }
-details summary:hover { border-color:rgba(99,102,241,0.35) !important; background:rgba(99,102,241,0.06) !important; }
-details[open] summary { border-radius:12px 12px 0 0 !important; border-bottom-color:transparent !important; background:rgba(99,102,241,0.1) !important; }
-details[open] > div:last-child { background:rgba(10,15,30,0.5) !important; border:1px solid rgba(99,102,241,0.18) !important; border-top:none !important; border-radius:0 0 12px 12px !important; padding:16px 18px !important; }
+details summary:hover { border-color:rgba(239,68,68,0.35) !important; background:rgba(239,68,68,0.06) !important; }
+details[open] summary { border-radius:12px 12px 0 0 !important; border-bottom-color:transparent !important; background:rgba(239,68,68,0.1) !important; }
+details[open] > div:last-child { background:rgba(9,9,11,0.5) !important; border:1px solid rgba(239,68,68,0.18) !important; border-top:none !important; border-radius:0 0 12px 12px !important; padding:16px 18px !important; }
 
 /* Inputs */
 .stSelectbox [data-baseweb="select"] > div,
 .stTextInput input,
 .stDateInput input {
-    background:rgba(10,15,30,0.8) !important; border:1px solid rgba(99,102,241,0.2) !important;
+    background:rgba(9,9,11,0.8) !important; border:1px solid rgba(239,68,68,0.2) !important;
     border-radius:10px !important; color:#e2e8f0 !important; font-family:'Inter',sans-serif !important;
 }
 .stSelectbox [data-baseweb="select"] > div:hover,
 .stTextInput input:focus,
-.stDateInput input:focus { border-color:rgba(99,102,241,0.45) !important; box-shadow:0 0 0 3px rgba(99,102,241,0.1) !important; }
+.stDateInput input:focus { border-color:rgba(239,68,68,0.45) !important; box-shadow:0 0 0 3px rgba(239,68,68,0.1) !important; }
 
 /* Buttons */
 .stButton > button {
-    background:linear-gradient(135deg,rgba(99,102,241,0.2),rgba(139,92,246,0.2)) !important;
-    border:1px solid rgba(99,102,241,0.35) !important; border-radius:10px !important;
-    color:#a5b4fc !important; font-weight:600 !important; font-size:0.82rem !important; transition:all 0.2s ease !important;
+    background:linear-gradient(135deg,rgba(239,68,68,0.2),rgba(220,38,38,0.2)) !important;
+    border:1px solid rgba(239,68,68,0.35) !important; border-radius:10px !important;
+    color:#fca5a5 !important; font-weight:600 !important; font-size:0.82rem !important; transition:all 0.2s ease !important;
 }
 .stButton > button:hover {
-    background:linear-gradient(135deg,rgba(99,102,241,0.35),rgba(139,92,246,0.35)) !important;
-    border-color:rgba(99,102,241,0.6) !important; box-shadow:0 4px 16px rgba(99,102,241,0.2) !important; transform:translateY(-1px) !important;
+    background:linear-gradient(135deg,rgba(239,68,68,0.35),rgba(220,38,38,0.35)) !important;
+    border-color:rgba(239,68,68,0.6) !important; box-shadow:0 4px 16px rgba(239,68,68,0.2) !important; transform:translateY(-1px) !important;
 }
 .stDownloadButton > button {
     background:linear-gradient(135deg,rgba(20,184,166,0.2),rgba(16,185,129,0.2)) !important;
@@ -285,25 +285,25 @@ details[open] > div:last-child { background:rgba(10,15,30,0.5) !important; borde
 }
 
 /* DataFrames */
-.stDataFrame { border-radius:14px !important; overflow:hidden !important; border:1px solid rgba(99,102,241,0.18) !important; }
+.stDataFrame { border-radius:14px !important; overflow:hidden !important; border:1px solid rgba(239,68,68,0.18) !important; }
 
 /* Metrics */
 [data-testid="metric-container"] {
-    background:rgba(10,15,30,0.8) !important; border:1px solid rgba(99,102,241,0.18) !important;
+    background:rgba(9,9,11,0.8) !important; border:1px solid rgba(239,68,68,0.18) !important;
     border-radius:12px !important; padding:16px 20px !important;
 }
 [data-testid="metric-container"] [data-testid="stMetricLabel"] { color:#64748b !important; font-size:0.72rem !important; text-transform:uppercase !important; letter-spacing:0.08em !important; }
 [data-testid="metric-container"] [data-testid="stMetricValue"] { color:#f1f5f9 !important; font-weight:800 !important; }
 
-hr { border:none !important; height:1px !important; background:linear-gradient(90deg,transparent,rgba(99,102,241,0.2),transparent) !important; margin:24px 0 !important; }
+hr { border:none !important; height:1px !important; background:linear-gradient(90deg,transparent,rgba(239,68,68,0.2),transparent) !important; margin:24px 0 !important; }
 
 /* Sidebar branding */
 .sb-logo { text-align:center; padding:20px 0 16px; }
 .sb-logo-icon { font-size:2.2rem; }
-.sb-logo-name { font-size:1rem; font-weight:800; color:#818cf8 !important; letter-spacing:0.04em; margin-top:4px; }
+.sb-logo-name { font-size:1rem; font-weight:800; color:#fca5a5 !important; letter-spacing:0.04em; margin-top:4px; }
 .sb-logo-tag  { font-size:0.6rem; color:#334155 !important; letter-spacing:0.14em; text-transform:uppercase; margin-top:2px; }
-.sb-section   { font-size:0.62rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#6366f1 !important; margin:20px 0 8px; padding-left:4px; }
-.sb-divider   { height:1px; background:linear-gradient(90deg,transparent,rgba(99,102,241,0.2),transparent); margin:16px 0; }
+.sb-section   { font-size:0.62rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:#ef4444 !important; margin:20px 0 8px; padding-left:4px; }
+.sb-divider   { height:1px; background:linear-gradient(90deg,transparent,rgba(239,68,68,0.2),transparent); margin:16px 0; }
 .sb-info      { font-size:0.68rem; color:#1e293b !important; text-align:center; padding:12px 0 4px; line-height:1.8; }
 
 /* PRD badge */
@@ -643,9 +643,9 @@ def render_geographic_map(df: pd.DataFrame, usage_df: pd.DataFrame, map_layer: s
             lat=hm_lats, lon=hm_lons, z=hm_weights,
             radius=40, opacity=0.35,
             colorscale=[
-                [0.0, "rgba(10,15,30,0)"],
-                [0.3, "rgba(99,102,241,0.4)"],
-                [0.6, "rgba(168,85,247,0.5)"],
+                [0.0, "rgba(9,9,11,0)"],
+                [0.3, "rgba(239,68,68,0.4)"],
+                [0.6, "rgba(220,38,38,0.5)"],
                 [0.85,"rgba(249,115,22,0.6)"],
                 [1.0, "rgba(239,68,68,0.75)"],
             ],
@@ -671,16 +671,16 @@ def render_geographic_map(df: pd.DataFrame, usage_df: pd.DataFrame, map_layer: s
     pulse_lats, pulse_lons, pulse_sizes, pulse_colors = [], [], [], []
 
     for i, (_, row) in enumerate(df_map.iterrows()):
-        sev_color = SEVERITY_COLORS.get(row["severity"], "#6366f1")
+        sev_color = SEVERITY_COLORS.get(row["severity"], "#ef4444")
         score = row["overall_score"]
         score_color = "#ef4444" if score >= 80 else "#f97316" if score >= 60 else "#eab308" if score >= 40 else "#22c55e"
         bubble_color = sev_color if map_mode == "Incident Severity" else score_color
 
         hover = (
             f"<b>{row['outage_id']}</b><br>"
-            f"📍 {row.get('city', row['region'])} ({row['region']})<br>"
-            f"⚠️ {row['severity']} | Rank #{int(row['rank'])}<br>"
-            f"📊 Impact Score: <b>{score:.1f}/100</b><br>"
+            f" {row.get('city', row['region'])} ({row['region']})<br>"
+            f"️ {row['severity']} | Rank #{int(row['rank'])}<br>"
+            f" Impact Score: <b>{score:.1f}/100</b><br>"
             f"👥 Affected: {int(row['affected_customers']):,}<br>"
             f"💬 Complaints: {int(row['complaint_count'])}<br>"
             f"⏱ Duration: {int(row['duration_minutes'])}min<br>"
@@ -732,7 +732,7 @@ def render_geographic_map(df: pd.DataFrame, usage_df: pd.DataFrame, map_layer: s
             center=dict(lat=center_lat, lon=center_lon),
             zoom=1.4,
         ),
-        paper_bgcolor="rgba(10,15,30,0.9)",
+        paper_bgcolor="rgba(9,9,11,0.9)",
         height=560,
         margin=dict(l=0, r=0, t=0, b=0),
         showlegend=False,
@@ -751,7 +751,7 @@ def render_geographic_map(df: pd.DataFrame, usage_df: pd.DataFrame, map_layer: s
             )
         if show_usage:
             st.markdown(
-                '<div class="map-legend-item" style="margin-top:8px"><div class="map-legend-dot" style="background:linear-gradient(135deg,#6366f1,#ef4444);opacity:0.6"></div>Usage Density (heatmap)</div>',
+                '<div class="map-legend-item" style="margin-top:8px"><div class="map-legend-dot" style="background:linear-gradient(135deg,#ef4444,#ef4444);opacity:0.6"></div>Usage Density (heatmap)</div>',
                 unsafe_allow_html=True,
             )
 
@@ -824,9 +824,9 @@ def render_geographic_map(df: pd.DataFrame, usage_df: pd.DataFrame, map_layer: s
                 x=[f"{h:02d}:00" for h in hourly.columns],
                 y=hourly.index.tolist(),
                 colorscale=[
-                    [0.0,  "rgba(10,15,30,1)"],
-                    [0.3,  "rgba(99,102,241,0.7)"],
-                    [0.65, "rgba(168,85,247,0.75)"],
+                    [0.0,  "rgba(9,9,11,1)"],
+                    [0.3,  "rgba(239,68,68,0.7)"],
+                    [0.65, "rgba(220,38,38,0.75)"],
                     [0.85, "rgba(249,115,22,0.8)"],
                     [1.0,  "rgba(239,68,68,1)"],
                 ],
@@ -847,11 +847,11 @@ def render_header(backend_ok: bool, total: int, last_updated: str):
     status_text = "Backend Online" if backend_ok else "Backend Offline"
     st.markdown(f"""
     <div class="noc-header">
-        <div class="noc-header-title">🛰️ NOC Outage Intelligence</div>
+        <div class="noc-header-title"> NOC Outage Intelligence</div>
         <div class="noc-header-sub">Telecom Outage Impact Prioritization Platform · v0.8.0</div>
         <div class="noc-header-meta">
             <div class="noc-meta-item">{status_dot} {status_text}</div>
-            <div class="noc-meta-item"><span class="noc-meta-dot" style="background:#6366f1;box-shadow:0 0 6px #6366f1"></span> {total} Incidents Loaded</div>
+            <div class="noc-meta-item"><span class="noc-meta-dot" style="background:#ef4444;box-shadow:0 0 6px #ef4444"></span> {total} Incidents Loaded</div>
             <div class="noc-meta-item"><span class="noc-meta-dot" style="background:#475569"></span> Refreshed {last_updated}</div>
         </div>
     </div>
@@ -886,7 +886,7 @@ def render_kpi_cards(df: pd.DataFrame, anomaly_count: int, usage_df: pd.DataFram
         <div class="kpi-label">Avg Impact Score</div>
         <div class="kpi-value" style="color:{score_color}">{avg_score:.1f}</div>
         <div class="kpi-sub" style="color:{score_color};opacity:0.7">{score_level} overall impact level</div>
-        <div class="kpi-icon">📊</div>
+        <div class="kpi-icon"></div>
       </div>
       <div class="kpi-card purple">
         <div class="kpi-glow"></div>
@@ -900,7 +900,7 @@ def render_kpi_cards(df: pd.DataFrame, anomaly_count: int, usage_df: pd.DataFram
         <div class="kpi-label">Anomaly Flags</div>
         <div class="kpi-value" style="color:#f59e0b">{anomaly_count}</div>
         <div class="kpi-sub">Unusual patterns detected</div>
-        <div class="kpi-icon">⚠️</div>
+        <div class="kpi-icon">️</div>
       </div>
     </div>
     """, unsafe_allow_html=True)
@@ -948,7 +948,7 @@ def render_overview_charts(df: pd.DataFrame, usage_df: pd.DataFrame):
         nz = sev[sev["Count"] > 0]
         fig = go.Figure(go.Pie(
             labels=nz["Severity"], values=nz["Count"], hole=0.62,
-            marker=dict(colors=[SEVERITY_COLORS[s] for s in nz["Severity"]], line=dict(color="#060b18", width=3)),
+            marker=dict(colors=[SEVERITY_COLORS[s] for s in nz["Severity"]], line=dict(color="#000000", width=3)),
             textfont=dict(color="#e2e8f0", family="Inter", size=11),
             hovertemplate="<b>%{label}</b><br>%{value} incidents (%{percent})<extra></extra>",
         ))
@@ -963,12 +963,12 @@ def render_overview_charts(df: pd.DataFrame, usage_df: pd.DataFrame):
         bar_colors = [SEVERITY_COLORS["Critical"] if s >= 80 else SEVERITY_COLORS["Major"] if s >= 60 else SEVERITY_COLORS["Warning"] if s >= 40 else SEVERITY_COLORS["Minor"] for s in reg["avg_score"]]
         fig = go.Figure(go.Bar(
             x=reg["avg_score"], y=reg["region"], orientation="h",
-            marker=dict(color=bar_colors, line=dict(color="#060b18", width=1)),
+            marker=dict(color=bar_colors, line=dict(color="#000000", width=1)),
             text=[f"{v:.1f}" for v in reg["avg_score"]], textposition="outside", textfont=dict(color="#64748b", size=11),
             hovertemplate="<b>%{y}</b><br>Avg Score: %{x:.1f}<br>Incidents: %{customdata}<extra></extra>", customdata=reg["count"],
         ))
         fig.update_layout(**pl("Avg Impact Score by Region", 300,
-                               xaxis=dict(range=[0, 105], gridcolor="rgba(99,102,241,0.08)", tickfont=dict(color="#64748b", size=11)),
+                               xaxis=dict(range=[0, 105], gridcolor="rgba(239,68,68,0.08)", tickfont=dict(color="#64748b", size=11)),
                                yaxis=dict(gridcolor="rgba(0,0,0,0)", tickfont=dict(color="#94a3b8", size=11))))
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
@@ -983,13 +983,13 @@ def render_overview_charts(df: pd.DataFrame, usage_df: pd.DataFrame):
             else:         bins[labels[3]] += 1
         fig = go.Figure(go.Bar(
             x=labels, y=list(bins.values()),
-            marker=dict(color=["#ef4444","#f97316","#eab308","#22c55e"], line=dict(color="#060b18",width=1), opacity=0.85),
+            marker=dict(color=["#ef4444","#f97316","#eab308","#22c55e"], line=dict(color="#000000",width=1), opacity=0.85),
             text=list(bins.values()), textposition="outside", textfont=dict(color="#64748b", size=11),
             hovertemplate="<b>%{x}</b><br>Incidents: %{y}<extra></extra>",
         ))
         fig.update_layout(**pl("Impact Score Distribution", 300,
                           xaxis=dict(gridcolor="rgba(0,0,0,0)", tickfont=dict(color="#94a3b8", size=10)),
-                          yaxis=dict(gridcolor="rgba(99,102,241,0.08)", tickfont=dict(color="#64748b", size=11))))
+                          yaxis=dict(gridcolor="rgba(239,68,68,0.08)", tickfont=dict(color="#64748b", size=11))))
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     with c4:
@@ -998,7 +998,7 @@ def render_overview_charts(df: pd.DataFrame, usage_df: pd.DataFrame):
                          hover_data={"outage_id":True,"region":True,"severity":True},
                          labels={"complaint_count":"Complaints","overall_score":"Impact Score"},
                          size="affected_customers", size_max=28)
-        fig.update_traces(marker=dict(line=dict(width=1,color="#060b18"),opacity=0.85))
+        fig.update_traces(marker=dict(line=dict(width=1,color="#000000"),opacity=0.85))
         fig.update_layout(**pl("Complaints vs Impact Score", 300))
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
@@ -1028,16 +1028,16 @@ def _render_traffic_charts(usage_df: pd.DataFrame, incidents_df: pd.DataFrame = 
         for _, row in latest.iterrows():
             u = row["peak_utilization_percent"]
             c = "#ef4444" if u>=90 else "#f97316" if u>=80 else "#eab308" if u>=70 else "#22c55e"
-            fig.add_trace(go.Bar(x=[u],y=[row["region"]],orientation="h",marker=dict(color=c,line=dict(color="#060b18",width=1)),
+            fig.add_trace(go.Bar(x=[u],y=[row["region"]],orientation="h",marker=dict(color=c,line=dict(color="#000000",width=1)),
                                   text=[f"{u:.0f}%"],textposition="outside",textfont=dict(color="#64748b",size=10),showlegend=False,
                                   hovertemplate=f"<b>{row['region']}</b><br>Peak Utilization: {u:.0f}%<extra></extra>"))
         fig.add_vline(x=90,line_dash="dot",line_color="rgba(239,68,68,0.4)",line_width=1)
-        fig.update_layout(**pl("Peak Utilization %", 320, xaxis=dict(range=[0,115],gridcolor="rgba(99,102,241,0.08)",tickfont=dict(color="#64748b",size=10)), yaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=10))))
+        fig.update_layout(**pl("Peak Utilization %", 320, xaxis=dict(range=[0,115],gridcolor="rgba(239,68,68,0.08)",tickfont=dict(color="#64748b",size=10)), yaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=10))))
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
     hourly = usage_df.groupby(["region","hour"]).agg(avg_traffic=("traffic_gbps","mean")).reset_index().pivot(index="region",columns="hour",values="avg_traffic")
     fig = go.Figure(go.Heatmap(z=hourly.values,x=[f"{h:02d}:00" for h in hourly.columns],y=hourly.index.tolist(),
-        colorscale=[[0,"rgba(10,15,30,1)"],[0.25,"rgba(99,102,241,0.6)"],[0.6,"rgba(168,85,247,0.7)"],[0.85,"rgba(249,115,22,0.8)"],[1,"rgba(239,68,68,1)"]],
+        colorscale=[[0,"rgba(9,9,11,1)"],[0.25,"rgba(239,68,68,0.6)"],[0.6,"rgba(220,38,38,0.7)"],[0.85,"rgba(249,115,22,0.8)"],[1,"rgba(239,68,68,1)"]],
         hovertemplate="<b>%{y}</b><br>Hour: %{x}<br>Avg Traffic: %{z:.1f} Gbps<extra></extra>",
         colorbar=dict(tickfont=dict(color="#475569",size=10),outlinewidth=0,bgcolor="rgba(0,0,0,0)",len=0.8)))
     fig.update_layout(**pl("Traffic Heatmap — Region × Hour of Day (Gbps)",280,
@@ -1087,23 +1087,23 @@ def render_incident_table(df: pd.DataFrame, anomaly_map: dict, search: str, sort
 
     for _, row in work.iloc[start_idx:end_idx].iterrows():
         flags = anomaly_map.get(row["outage_id"], [])
-        anomaly_chips = " ".join(f'<span class="achip">⚠ {f.get("anomaly_type","").replace("_"," ").title()}</span>' for f in flags[:3])
+        anomaly_chips = " ".join(f'<span class="achip"> {f.get("anomaly_type","").replace("_"," ").title()}</span>' for f in flags[:3])
         if len(flags) > 3:
             anomaly_chips += f' <span class="achip">+{len(flags)-3} more</span>'
         dur = f"{row['duration_minutes']//60}h {row['duration_minutes']%60}m" if row["duration_minutes"] else "—"
-        sev_color = SEVERITY_COLORS.get(row["severity"],"#6366f1")
+        sev_color = SEVERITY_COLORS.get(row["severity"],"#ef4444")
         status_color = "#22c55e" if str(row["status"]).lower()=="active" else "#475569"
         ts_str = row["timestamp"].strftime("%Y-%m-%d %H:%M") if pd.notna(row["timestamp"]) else "—"
 
-        label = f"#{row['rank']}  {row['outage_id']}  ·  {row['region']}  ·  Score: {row['overall_score']:.1f}  ·  {row['severity']}" + (f"  ·  ⚠ {len(flags)}" if flags else "")
+        label = f"#{row['rank']}  {row['outage_id']}  ·  {row['region']}  ·  Score: {row['overall_score']:.1f}  ·  {row['severity']}" + (f"  ·   {len(flags)}" if flags else "")
 
         with st.expander(label):
             st.markdown(f"""
-            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:4px 0 12px;border-bottom:1px solid rgba(99,102,241,0.12);margin-bottom:14px;">
-                <span style="font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;color:#818cf8;">#{row['rank']} {row['outage_id']}</span>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:4px 0 12px;border-bottom:1px solid rgba(239,68,68,0.12);margin-bottom:14px;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:1rem;font-weight:700;color:#fca5a5;">#{row['rank']} {row['outage_id']}</span>
                 {badge(row['severity'])}
-                <span style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);color:#94a3b8;padding:2px 10px;border-radius:99px;font-size:0.72rem;">📍 {row.get('city',row['region'])}</span>
-                <span style="background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);color:#94a3b8;padding:2px 10px;border-radius:99px;font-size:0.72rem;">⏱ {dur}</span>
+                <span style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#94a3b8;padding:2px 10px;border-radius:99px;font-size:0.72rem;"> {row.get('city',row['region'])}</span>
+                <span style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:#94a3b8;padding:2px 10px;border-radius:99px;font-size:0.72rem;">⏱ {dur}</span>
                 <span style="color:#475569;font-size:0.72rem;">🕐 {ts_str}</span>
                 <span style="color:{status_color};font-size:0.75rem;font-weight:600;">● {row['status']}</span>
                 {anomaly_chips}
@@ -1117,14 +1117,14 @@ def render_incident_table(df: pd.DataFrame, anomaly_map: dict, search: str, sort
                 fig.add_trace(go.Bar(
                     x=["Severity (40%)", "Complaints (35%)", "Usage (25%)"],
                     y=[row["sev_contribution"], row["cmp_contribution"], row["usg_contribution"]],
-                    marker=dict(color=["#ef4444","#f97316","#6366f1"],line=dict(color="#060b18",width=1),opacity=0.85),
+                    marker=dict(color=["#ef4444","#f97316","#ef4444"],line=dict(color="#000000",width=1),opacity=0.85),
                     text=[f"{v:.1f}" for v in [row["sev_contribution"],row["cmp_contribution"],row["usg_contribution"]]],
                     textposition="outside", textfont=dict(color="#64748b",size=10),
                     hovertemplate="<b>%{x}</b><br>Contribution: %{y:.1f}<extra></extra>"))
                 fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(0,0,0,0)",height=190,showlegend=False,
                                   margin=dict(l=4,r=4,t=8,b=4),
                                   xaxis=dict(tickfont=dict(color="#64748b",size=9),gridcolor="rgba(0,0,0,0)"),
-                                  yaxis=dict(gridcolor="rgba(99,102,241,0.08)",tickfont=dict(color="#64748b",size=9),range=[0,45]))
+                                  yaxis=dict(gridcolor="rgba(239,68,68,0.08)",tickfont=dict(color="#64748b",size=9),range=[0,45]))
                 st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False}, key=f"score_bar_{row['outage_id']}")
 
                 fig2 = go.Figure(go.Indicator(
@@ -1132,8 +1132,8 @@ def render_incident_table(df: pd.DataFrame, anomaly_map: dict, search: str, sort
                     value=row["overall_score"],
                     number=dict(font=dict(color="#f1f5f9",size=28,family="Inter"),suffix="/100"),
                     gauge=dict(axis=dict(range=[0,100],tickcolor="#334155",tickfont=dict(color="#334155",size=8)),
-                               bar=dict(color=sev_color,thickness=0.22),bgcolor="rgba(10,15,30,0.8)",
-                               borderwidth=1,bordercolor="rgba(99,102,241,0.2)",
+                               bar=dict(color=sev_color,thickness=0.22),bgcolor="rgba(9,9,11,0.8)",
+                               borderwidth=1,bordercolor="rgba(239,68,68,0.2)",
                                steps=[dict(range=[0,40],color="rgba(34,197,94,0.08)"),dict(range=[40,60],color="rgba(234,179,8,0.08)"),
                                       dict(range=[60,80],color="rgba(249,115,22,0.08)"),dict(range=[80,100],color="rgba(239,68,68,0.08)")],
                                threshold=dict(line=dict(color=sev_color,width=2),thickness=0.75,value=row["overall_score"]))))
@@ -1141,7 +1141,7 @@ def render_incident_table(df: pd.DataFrame, anomaly_map: dict, search: str, sort
                 st.plotly_chart(fig2, use_container_width=True, config={"displayModeBar": False}, key=f"score_gauge_{row['outage_id']}")
 
             with d2:
-                st.markdown("**📋 Incident Details**")
+                st.markdown("** Incident Details**")
                 pairs = [("Component",row.get("component","—")),
                          ("City/Area",row.get("city","—")),
                          ("Affected Customers",f"{int(row['affected_customers']):,}" if row["affected_customers"] else "—"),
@@ -1152,15 +1152,15 @@ def render_incident_table(df: pd.DataFrame, anomaly_map: dict, search: str, sort
                 st.markdown("".join(f'<div class="stat-pair"><span class="stat-key">{k}</span><span class="stat-val">{v}</span></div>' for k,v in pairs), unsafe_allow_html=True)
 
             with d3:
-                st.markdown("**⚠️ Anomaly Flags**")
+                st.markdown("**️ Anomaly Flags**")
                 if flags:
                     for f in flags:
                         sev=f.get("severity","low"); cls=sev.lower()
                         atype=f.get("anomaly_type","").replace("_"," ").title()
                         actual=f.get("actual_value",0); thresh=f.get("threshold_value",0); dev=f.get("deviation_percent",0)
-                        st.markdown(f'<div class="flag-card {cls}"><div class="flag-sev {cls}">{sev.upper()} · {atype}</div><div class="flag-desc">{f.get("description","")}</div><div style="font-size:0.71rem;color:#334155;margin-bottom:4px;">Actual: <b style="color:#e2e8f0;">{actual:.1f}</b> | Threshold: <b style="color:#e2e8f0;">{thresh:.1f}</b> | Dev: <b>{dev:.1f}%</b></div><div class="flag-rec">💡 {f.get("recommendation","")}</div></div>', unsafe_allow_html=True)
+                        st.markdown(f'<div class="flag-card {cls}"><div class="flag-sev {cls}">{sev.upper()} · {atype}</div><div class="flag-desc">{f.get("description","")}</div><div style="font-size:0.71rem;color:#334155;margin-bottom:4px;">Actual: <b style="color:#e2e8f0;">{actual:.1f}</b> | Threshold: <b style="color:#e2e8f0;">{thresh:.1f}</b> | Dev: <b>{dev:.1f}%</b></div><div class="flag-rec"> {f.get("recommendation","")}</div></div>', unsafe_allow_html=True)
                 else:
-                    st.markdown('<div style="color:#334155;font-size:0.82rem;text-align:center;padding:24px 0;">✅ No anomalies detected</div>', unsafe_allow_html=True)
+                    st.markdown('<div style="color:#334155;font-size:0.82rem;text-align:center;padding:24px 0;"> No anomalies detected</div>', unsafe_allow_html=True)
 
             if row["explanation"]:
                 st.markdown(f'<div class="expl-box"><div class="expl-label">Score Explanation</div><div class="expl-text">{row["explanation"]}</div></div>', unsafe_allow_html=True)
@@ -1188,7 +1188,7 @@ def render_regional_analysis(df_all: pd.DataFrame, usage_df: pd.DataFrame):
         sev = rdf["severity"].value_counts().reindex(SEVERITY_ORDER, fill_value=0).reset_index()
         sev.columns = ["Severity","Count"]; nz = sev[sev["Count"]>0]
         fig = go.Figure(go.Pie(labels=nz["Severity"],values=nz["Count"],hole=0.58,
-                               marker=dict(colors=[SEVERITY_COLORS[s] for s in nz["Severity"]],line=dict(color="#060b18",width=2)),textfont=dict(color="#e2e8f0")))
+                               marker=dict(colors=[SEVERITY_COLORS[s] for s in nz["Severity"]],line=dict(color="#000000",width=2)),textfont=dict(color="#e2e8f0")))
         fig.update_layout(**pl(f"Severity — {sel}",280))
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar":False})
     with rc2:
@@ -1196,10 +1196,10 @@ def render_regional_analysis(df_all: pd.DataFrame, usage_df: pd.DataFrame):
             comp = rdf.groupby("component")["overall_score"].mean().reset_index().sort_values("overall_score")
             comp = comp.assign(overall_score=comp["overall_score"].round(1))
             fig = go.Figure(go.Bar(x=comp["overall_score"],y=comp["component"],orientation="h",
-                                   marker=dict(color="#6366f1",opacity=0.75,line=dict(color="#060b18",width=1)),
+                                   marker=dict(color="#ef4444",opacity=0.75,line=dict(color="#000000",width=1)),
                                    text=[f"{v:.1f}" for v in comp["overall_score"]],textposition="outside",textfont=dict(color="#64748b",size=11)))
             fig.update_layout(**pl(f"Avg Score by Component — {sel}",280,
-                              xaxis=dict(range=[0,105],gridcolor="rgba(99,102,241,0.08)",tickfont=dict(color="#64748b",size=10)),
+                              xaxis=dict(range=[0,105],gridcolor="rgba(239,68,68,0.08)",tickfont=dict(color="#64748b",size=10)),
                               yaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=11))))
             st.plotly_chart(fig, use_container_width=True, config={"displayModeBar":False})
 
@@ -1207,13 +1207,13 @@ def render_regional_analysis(df_all: pd.DataFrame, usage_df: pd.DataFrame):
         r_usage = usage_df[usage_df["region"]==sel].sort_values("timestamp")
         r_usage_ds = downsample_timeseries(r_usage, "timestamp", ["traffic_gbps", "active_users"], max_pts=400)
         fig = make_subplots(rows=2,cols=1,shared_xaxes=True,subplot_titles=["Traffic (Gbps)","Active Users"],vertical_spacing=0.08)
-        fig.add_trace(go.Scatter(x=r_usage_ds["timestamp"],y=r_usage_ds["traffic_gbps"],mode="lines",name="Traffic",line=dict(color="#6366f1",width=1.5),fill="tozeroy",fillcolor="rgba(99,102,241,0.06)",hovertemplate="%{y:.1f} Gbps<extra></extra>"),row=1,col=1)
+        fig.add_trace(go.Scatter(x=r_usage_ds["timestamp"],y=r_usage_ds["traffic_gbps"],mode="lines",name="Traffic",line=dict(color="#ef4444",width=1.5),fill="tozeroy",fillcolor="rgba(239,68,68,0.06)",hovertemplate="%{y:.1f} Gbps<extra></extra>"),row=1,col=1)
         fig.add_trace(go.Scatter(x=r_usage_ds["timestamp"],y=r_usage_ds["active_users"],mode="lines",name="Active Users",line=dict(color="#10b981",width=1.5),fill="tozeroy",fillcolor="rgba(16,185,129,0.06)",hovertemplate="%{y:,.0f}<extra></extra>"),row=2,col=1)
         fig.update_layout(paper_bgcolor="rgba(0,0,0,0)",plot_bgcolor="rgba(0,0,0,0)",height=380,showlegend=False,
                           margin=dict(l=8,r=8,t=44,b=8),font=dict(family="Inter",color="#94a3b8",size=11),
                           title=dict(text=f"Network Telemetry — {sel} (Smoothed, {len(r_usage_ds):,} pts)",font=dict(color="#64748b",size=13),x=0), hovermode="x unified")
         for ax in ["xaxis","xaxis2","yaxis","yaxis2"]:
-            fig.update_layout(**{ax:dict(gridcolor="rgba(99,102,241,0.08)",tickfont=dict(color="#64748b",size=10))})
+            fig.update_layout(**{ax:dict(gridcolor="rgba(239,68,68,0.08)",tickfont=dict(color="#64748b",size=10))})
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar":False})
 
     section_header(f"Incidents in {sel}", len(rdf))
@@ -1232,7 +1232,7 @@ def render_regional_analysis(df_all: pd.DataFrame, usage_df: pd.DataFrame):
 def render_anomaly_intelligence(anomaly_data: dict):
     section_header("Anomaly Intelligence")
     if not anomaly_data.get("incidents"):
-        st.success("✅ No anomalies detected in current dataset.")
+        st.success(" No anomalies detected in current dataset.")
         return
     m1,m2,m3,m4 = st.columns(4)
     m1.metric("Incidents w/ Anomalies", anomaly_data.get("incidents_with_anomalies",0))
@@ -1251,27 +1251,27 @@ def render_anomaly_intelligence(anomaly_data: dict):
         ac1,ac2 = st.columns(2)
         with ac1:
             fig=go.Figure(go.Bar(x=list(type_counts.keys()),y=list(type_counts.values()),
-                                  marker=dict(color=["#6366f1","#f59e0b","#10b981","#ec4899"][:len(type_counts)],line=dict(color="#060b18",width=1),opacity=0.82),
+                                  marker=dict(color=["#ef4444","#f59e0b","#10b981","#ec4899"][:len(type_counts)],line=dict(color="#000000",width=1),opacity=0.82),
                                   text=list(type_counts.values()),textposition="outside",textfont=dict(color="#64748b",size=11)))
-            fig.update_layout(**pl("Anomalies by Type", 280, xaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=10)), yaxis=dict(gridcolor="rgba(99,102,241,0.08)",tickfont=dict(color="#64748b",size=10))))
+            fig.update_layout(**pl("Anomalies by Type", 280, xaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=10)), yaxis=dict(gridcolor="rgba(239,68,68,0.08)",tickfont=dict(color="#64748b",size=10))))
             st.plotly_chart(fig,use_container_width=True,config={"displayModeBar":False})
         with ac2:
             scm={"High":"#ef4444","Medium":"#eab308","Low":"#22c55e"}
             fig=go.Figure(go.Pie(labels=list(sev_counts.keys()),values=list(sev_counts.values()),hole=0.58,
-                                  marker=dict(colors=[scm.get(s,"#6366f1") for s in sev_counts],line=dict(color="#060b18",width=2)),textfont=dict(color="#e2e8f0")))
+                                  marker=dict(colors=[scm.get(s,"#ef4444") for s in sev_counts],line=dict(color="#000000",width=2)),textfont=dict(color="#e2e8f0")))
             fig.update_layout(**pl("Anomalies by Severity",280))
             st.plotly_chart(fig,use_container_width=True,config={"displayModeBar":False})
     st.markdown("---")
     section_header("Incident Anomaly Detail", len(anomaly_data.get("incidents",[])))
     for inc in anomaly_data.get("incidents",[]):
         oid=inc.get("outage_id",""); region=inc.get("region",""); primary=inc.get("primary_concern",""); flags=inc.get("anomaly_flags",[]); n_high=inc.get("high_severity_count",0)
-        with st.expander(f"⚠️  {oid}  —  {region}  ·  {'🔴 HIGH SEVERITY' if n_high else f'⚠ {len(flags)} flag(s)'}"):
+        with st.expander(f"️  {oid}  —  {region}  ·  {' HIGH SEVERITY' if n_high else f' {len(flags)} flag(s)'}"):
             if primary:
                 st.markdown(f'<div style="background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.22);border-radius:10px;padding:12px 16px;margin-bottom:14px;"><div style="font-size:0.67rem;font-weight:800;color:#ef4444;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:5px;">PRIMARY CONCERN</div><div style="font-size:0.82rem;color:#fca5a5;">{primary}</div></div>',unsafe_allow_html=True)
             for f in flags:
                 sev=f.get("severity","low"); cls=sev.lower(); atype=f.get("anomaly_type","").replace("_"," ").title()
                 actual=f.get("actual_value",0); thresh=f.get("threshold_value",0); dev=f.get("deviation_percent",0)
-                st.markdown(f'<div class="flag-card {cls}"><div class="flag-sev {cls}">{sev.upper()} · {atype}</div><div class="flag-desc">{f.get("description","")}</div><div style="font-size:0.71rem;color:#334155;margin-bottom:4px;">Actual: <b style="color:#e2e8f0;">{actual:.1f}</b> | Threshold: <b style="color:#e2e8f0;">{thresh:.1f}</b> | Deviation: <b>{dev:.1f}%</b></div><div class="flag-rec">💡 {f.get("recommendation","")}</div></div>',unsafe_allow_html=True)
+                st.markdown(f'<div class="flag-card {cls}"><div class="flag-sev {cls}">{sev.upper()} · {atype}</div><div class="flag-desc">{f.get("description","")}</div><div style="font-size:0.71rem;color:#334155;margin-bottom:4px;">Actual: <b style="color:#e2e8f0;">{actual:.1f}</b> | Threshold: <b style="color:#e2e8f0;">{thresh:.1f}</b> | Deviation: <b>{dev:.1f}%</b></div><div class="flag-rec"> {f.get("recommendation","")}</div></div>',unsafe_allow_html=True)
 
 
 # ══════════════════════════════════════════════════════════
@@ -1282,7 +1282,7 @@ def render_data_explorer(usage_df: pd.DataFrame, complaints_df: pd.DataFrame):
     if usage_df.empty:
         st.info("Usage metrics CSV not found.")
         return
-    tab1, tab2 = st.tabs(["📡 Usage Metrics (101K)", "💬 Complaint Logs"])
+    tab1, tab2 = st.tabs([" Usage Metrics (101K)", "💬 Complaint Logs"])
     with tab1:
         cx1,cx2,cx3 = st.columns(3)
         regions = ["All"] + sorted(usage_df["region"].unique())
@@ -1312,21 +1312,21 @@ def render_data_explorer(usage_df: pd.DataFrame, complaints_df: pd.DataFrame):
         with cc1:
             if "complaint_type" in complaints_df.columns:
                 ct=complaints_df["complaint_type"].value_counts()
-                fig=go.Figure(go.Pie(labels=ct.index.tolist(),values=ct.values.tolist(),hole=0.55,marker=dict(colors=REGION_PALETTE[:len(ct)],line=dict(color="#060b18",width=2)),textfont=dict(color="#e2e8f0")))
+                fig=go.Figure(go.Pie(labels=ct.index.tolist(),values=ct.values.tolist(),hole=0.55,marker=dict(colors=REGION_PALETTE[:len(ct)],line=dict(color="#000000",width=2)),textfont=dict(color="#e2e8f0")))
                 fig.update_layout(**pl("Complaints by Type",280))
                 st.plotly_chart(fig,use_container_width=True,config={"displayModeBar":False})
         with cc2:
             if "escalation_level" in complaints_df.columns:
                 el=complaints_df["escalation_level"].value_counts().reset_index(); el.columns=["Level","Count"]
                 elc={"Critical":"#ef4444","High":"#f97316","Medium":"#eab308","Low":"#22c55e"}
-                fig=go.Figure(go.Bar(x=el["Level"],y=el["Count"],marker=dict(color=[elc.get(l,"#6366f1") for l in el["Level"]],line=dict(color="#060b18",width=1),opacity=0.85),
+                fig=go.Figure(go.Bar(x=el["Level"],y=el["Count"],marker=dict(color=[elc.get(l,"#ef4444") for l in el["Level"]],line=dict(color="#000000",width=1),opacity=0.85),
                                       text=el["Count"],textposition="outside",textfont=dict(color="#64748b",size=11)))
-                fig.update_layout(**pl("Complaints by Escalation Level", 280, xaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=11)), yaxis=dict(gridcolor="rgba(99,102,241,0.08)",tickfont=dict(color="#64748b",size=10))))
+                fig.update_layout(**pl("Complaints by Escalation Level", 280, xaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=11)), yaxis=dict(gridcolor="rgba(239,68,68,0.08)",tickfont=dict(color="#64748b",size=10))))
                 st.plotly_chart(fig,use_container_width=True,config={"displayModeBar":False})
         if "customer_count" in complaints_df.columns and "region" in complaints_df.columns:
             rcust=complaints_df.groupby("region")["customer_count"].sum().reset_index().sort_values("customer_count")
-            fig=go.Figure(go.Bar(x=rcust["customer_count"],y=rcust["region"],orientation="h",marker=dict(color="#a855f7",opacity=0.75,line=dict(color="#060b18",width=1)),text=[f"{int(v):,}" for v in rcust["customer_count"]],textposition="outside",textfont=dict(color="#64748b",size=11)))
-            fig.update_layout(**pl("Total Affected Customers by Region", 280, xaxis=dict(gridcolor="rgba(99,102,241,0.08)",tickfont=dict(color="#64748b",size=10)), yaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=11))))
+            fig=go.Figure(go.Bar(x=rcust["customer_count"],y=rcust["region"],orientation="h",marker=dict(color="#dc2626",opacity=0.75,line=dict(color="#000000",width=1)),text=[f"{int(v):,}" for v in rcust["customer_count"]],textposition="outside",textfont=dict(color="#64748b",size=11)))
+            fig.update_layout(**pl("Total Affected Customers by Region", 280, xaxis=dict(gridcolor="rgba(239,68,68,0.08)",tickfont=dict(color="#64748b",size=10)), yaxis=dict(gridcolor="rgba(0,0,0,0)",tickfont=dict(color="#94a3b8",size=11))))
             st.plotly_chart(fig,use_container_width=True,config={"displayModeBar":False})
         st.markdown("**Complaint Logs Preview**")
         st.dataframe(complaints_df.head(50),use_container_width=True,hide_index=True)
@@ -1342,7 +1342,7 @@ def render_sidebar(df_all: pd.DataFrame, usage_df: pd.DataFrame):
     with st.sidebar:
         st.markdown("""
         <div class="sb-logo">
-            <div class="sb-logo-icon">🛰️</div>
+            <div class="sb-logo-icon"></div>
             <div class="sb-logo-name">NOC Intelligence</div>
             <div class="sb-logo-tag">Outage Prioritization Platform</div>
         </div>
@@ -1352,11 +1352,11 @@ def render_sidebar(df_all: pd.DataFrame, usage_df: pd.DataFrame):
         st.markdown('<div class="sb-section">Navigation</div>', unsafe_allow_html=True)
 
         view = st.radio("Navigation", [
-            "📊  Dashboard",
-            "🗺️  Geographic Map",
-            "📍  Regional Analysis",
-            "⚠️  Anomaly Intelligence",
-            "🔬  Data Explorer",
+            "Dashboard",
+            "Geographic Map",
+            "Regional Analysis",
+            "️Anomaly Intelligence",
+            "Data Explorer",
         ], label_visibility="collapsed")
 
         st.markdown('<div class="sb-divider"></div>', unsafe_allow_html=True)
@@ -1397,16 +1397,16 @@ def render_sidebar(df_all: pd.DataFrame, usage_df: pd.DataFrame):
         st.markdown('<div class="sb-divider"></div>', unsafe_allow_html=True)
         st.markdown('<div class="sb-section">Data Refresh</div>', unsafe_allow_html=True)
         auto_refresh = st.checkbox("Auto-refresh (30s)", value=False, key="sb_auto")
-        if st.button("🔄  Refresh Now", use_container_width=True):
+        if st.button("Refresh Now", use_container_width=True):
             clear_all_cache()
             st.rerun()
 
         st.markdown('<div class="sb-divider"></div>', unsafe_allow_html=True)
         st.markdown(f"""
         <div class="sb-info">
-            Backend: <code style="color:#6366f1">{API_BASE}</code><br>
-            Data: <code style="color:#6366f1">{DATA_DIR}/</code><br>
-            Map: <code style="color:#6366f1">OpenStreetMap</code><br>
+            Backend: <code style="color:#ef4444">{API_BASE}</code><br>
+            Data: <code style="color:#ef4444">{DATA_DIR}/</code><br>
+            Map: <code style="color:#ef4444">OpenStreetMap</code><br>
             Version 0.8.0 · MVP Complete
         </div>
         """, unsafe_allow_html=True)
@@ -1437,7 +1437,7 @@ def main():
     render_header(backend_ok, len(df_all), datetime.now().strftime("%H:%M:%S"))
 
     if not backend_ok:
-        st.error(f"⚠️ **Backend Unavailable** — `{API_BASE}` is not responding. Error: `{incidents_data.get('message','Connection refused')}`")
+        st.error(f"️ **Backend Unavailable** — `{API_BASE}` is not responding. Error: `{incidents_data.get('message','Connection refused')}`")
 
     render_kpi_cards(df, anomaly_data.get("total_anomalies", 0), usage_df)
 
@@ -1450,13 +1450,13 @@ def main():
         if score_range != (0, 100):        active_filters.append(f"Score: `{score_range[0]}–{score_range[1]}`")
         if search:                         active_filters.append(f"Search: `{search}`")
         filter_str = "  ·  ".join(active_filters) if active_filters else "No filters active"
-        fil_col.markdown(f"<div style='color:#334155;font-size:0.78rem;padding:8px 0;'>Showing <b style='color:#94a3b8'>{len(df)}</b> of <b style='color:#94a3b8'>{len(df_all)}</b> incidents  ·  {filter_str}  ·  📅 {date_range[0]} → {date_range[1]}</div>", unsafe_allow_html=True)
+        fil_col.markdown(f"<div style='color:#334155;font-size:0.78rem;padding:8px 0;'>Showing <b style='color:#94a3b8'>{len(df)}</b> of <b style='color:#94a3b8'>{len(df_all)}</b> incidents  ·  {filter_str}  ·   {date_range[0]} → {date_range[1]}</div>", unsafe_allow_html=True)
         if not df.empty:
             cols = ["rank","outage_id","region","severity","overall_score","duration_minutes","complaint_count","affected_customers","avg_traffic_gbps","component","status"]
             avail = [c for c in cols if c in df.columns]
             buf = io.BytesIO()
             df[avail].to_csv(buf, index=False)
-            exp_col.download_button("⬇ Export", data=buf.getvalue(),
+            exp_col.download_button(" Export", data=buf.getvalue(),
                                     file_name=f"noc_incidents_{datetime.now().strftime('%Y%m%d_%H%M')}.csv",
                                     mime="text/csv", use_container_width=True)
 
